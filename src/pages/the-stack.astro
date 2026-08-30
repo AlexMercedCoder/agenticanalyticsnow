@@ -1,0 +1,168 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import StackDiagram from '../components/StackDiagram.astro';
+import SubstrateDiagram from '../components/SubstrateDiagram.astro';
+
+const entries = (await getCollection('kb')).sort((a, b) => a.data.order - b.data.order);
+const stack = entries.filter((e) => e.data.kind === 'stack');
+const substrate = entries.filter((e) => e.data.kind === 'substrate');
+
+const jsonLd = [
+  {
+    '@type': 'TechArticle',
+    '@id': 'https://agenticanalyticsnow.com/the-stack#article',
+    headline: 'The agentic analytics stack',
+    description:
+      'The four layers of agentic analytics: a model that reasons, a harness that runs the loop, open interfaces that carry the request, and governed semantic data in an open lakehouse underneath.',
+    url: 'https://agenticanalyticsnow.com/the-stack',
+    author: { '@id': 'https://alexmerced.com/#alexmerced' },
+    isPartOf: { '@id': 'https://agenticanalyticsnow.com/#website' },
+    inLanguage: 'en-US',
+  },
+  {
+    '@type': 'BreadcrumbList',
+    '@id': 'https://agenticanalyticsnow.com/the-stack#breadcrumbs',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://agenticanalyticsnow.com/' },
+      { '@type': 'ListItem', position: 2, name: 'The stack', item: 'https://agenticanalyticsnow.com/the-stack' },
+    ],
+  },
+];
+---
+
+<Base
+  title="The agentic analytics stack"
+  description="Four layers: a model that reasons, a harness that runs the loop, open interfaces that carry the request, and governed semantic data in an open lakehouse underneath. Each fails differently, and knowing which one is failing is most of debugging an agent."
+  jsonLd={jsonLd}
+  keywords={['agentic stack', 'agent architecture', 'model harness interfaces', 'MCP', 'Iceberg REST catalog', 'Arrow Flight']}
+>
+  <section class="page-head">
+    <div class="shell">
+      <p class="eyebrow">The stack</p>
+      <h1>Four layers, top to bottom</h1>
+      <p class="page-head__lede">
+        Agentic analytics is usually discussed as though it were a model choice. It is four layers,
+        built by different people, failing in different ways, replaceable on different timescales.
+        Being able to name which one is at fault is the difference between fixing a system and
+        swapping models and hoping.
+      </p>
+    </div>
+  </section>
+
+  <section class="shell diagram-band">
+    <StackDiagram />
+  </section>
+
+  <section class="shell band">
+    <div class="band__head">
+      <h2>The agent, in three parts</h2>
+      <p>
+        A model reasons. A harness runs the loop, decides what the model sees, and handles failure.
+        Interfaces carry the request out to the world. Collapse the three and you have bought a
+        product rather than built a capability.
+      </p>
+    </div>
+    <ol class="layers">
+      {stack.map((entry) => (
+        <li>
+          <a href={`/knowledge-base/${entry.id}`}>
+            <span class="layers__num">{String(entry.data.order).padStart(2, '0')}</span>
+            <span class="layers__body">
+              <strong>{entry.data.title}</strong>
+              <span>{entry.data.summary}</span>
+            </span>
+          </a>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="under">
+    <div class="shell under__grid">
+      <div>
+        <p class="eyebrow" style="color: var(--result);">Underneath all three</p>
+        <h2>Governed semantic data</h2>
+        <p>
+          The layer that decides whether the answer is right. One definition of each metric, one
+          copy of each dataset, one place access is enforced, and enough history to reproduce an
+          answer after the fact.
+        </p>
+        <p>
+          Five Apache projects settle five separate questions here, and the reason to care that each
+          is an open specification is that agents multiply readers. Formats one engine can read
+          cannot serve many readers.
+        </p>
+      </div>
+      <SubstrateDiagram />
+    </div>
+  </section>
+
+  <section class="shell band">
+    <div class="band__head">
+      <h2>The substrate, entry by entry</h2>
+      <p>What each project settles, where it stops, and why the boundary between them is deliberate.</p>
+    </div>
+    <ul class="cards">
+      {substrate.map((entry) => (
+        <li>
+          <a href={`/knowledge-base/${entry.id}`}>
+            <strong>{entry.data.title}</strong>
+            <span>{entry.data.summary}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+    <p class="band__more"><a href="/knowledge-base">The full knowledge base, all {entries.length} entries</a></p>
+  </section>
+</Base>
+
+<style>
+  .page-head { background: var(--paper-raised); padding: 3rem 0 2.75rem; border-bottom: 1px solid var(--rule); }
+  .page-head h1 { margin: 0 0 1rem; }
+  .page-head__lede { max-width: 46rem; font-size: 1.06rem; color: var(--ink-soft); margin: 0; }
+
+  .diagram-band { padding: 3rem 0 1rem; max-width: min(760px, calc(100% - 3rem)); }
+
+  .band { padding: 3rem 0 1rem; }
+  .band__head { max-width: 44rem; margin-bottom: 1.75rem; }
+  .band__head h2 { margin: 0 0 0.55rem; }
+  .band__head p { color: var(--ink-soft); margin: 0; }
+  .band__more { margin: 1.6rem 0 0; font-weight: 650; font-size: 0.95rem; }
+
+  .layers { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.9rem; counter-reset: layer; }
+  .layers a {
+    display: grid; grid-template-columns: auto 1fr; gap: 1.1rem; padding: 1.3rem 1.35rem;
+    text-decoration: none; background: var(--paper-raised); border: 1px solid var(--rule);
+    border-left: 4px solid var(--signal); border-radius: var(--radius);
+  }
+  .layers a:hover { border-left-color: var(--agent); }
+  .layers__num { font: 700 1.1rem var(--mono); color: var(--signal); }
+  .layers__body { display: grid; gap: 0.3rem; }
+  .layers__body strong { font-family: var(--display); font-size: 1.12rem; letter-spacing: -0.02em; }
+  .layers__body span { font-size: 0.92rem; color: var(--ink-soft); }
+
+  .under {
+    background: var(--void-800); color: #e9ecf7; padding: 3.75rem 0; margin-top: 2.5rem;
+    background-image: radial-gradient(circle at 18% 80%, rgba(18, 181, 163, .2), transparent 46%);
+  }
+  .under__grid { display: grid; grid-template-columns: 1fr 1.05fr; gap: 3.5rem; align-items: center; }
+  .under h2 { color: #fff; margin: 0 0 0.9rem; }
+  .under p { color: #a9b1cc; }
+  .under :global(.sub__name) { fill: #fff; }
+  .under :global(.sub__role), .under :global(.sub__arrow-role) { fill: #a9b1cc; }
+
+  .cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1rem; }
+  .cards a {
+    display: grid; gap: 0.4rem; height: 100%; padding: 1.3rem 1.25rem; text-decoration: none;
+    background: var(--paper-raised); border: 1px solid var(--rule); border-top: 3px solid var(--data);
+    border-radius: var(--radius);
+  }
+  .cards a:hover { border-color: var(--data); }
+  .cards strong { font-family: var(--display); font-size: 1.04rem; letter-spacing: -0.02em; }
+  .cards span { font-size: 0.88rem; color: var(--ink-soft); line-height: 1.5; }
+
+  @media (max-width: 920px) {
+    .under__grid { grid-template-columns: 1fr; gap: 2rem; }
+  }
+</style>

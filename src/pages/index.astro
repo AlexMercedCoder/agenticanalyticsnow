@@ -1,0 +1,251 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import EquationHero from '../components/EquationHero.astro';
+import SubstrateDiagram from '../components/SubstrateDiagram.astro';
+import { writing, channels } from '../data/work';
+
+const entries = (await getCollection('kb')).sort((a, b) => a.data.order - b.data.order);
+const opening = entries.filter((e) => e.data.kind === 'agentic');
+const stack = entries.filter((e) => e.data.kind === 'stack');
+const practice = entries.filter((e) => e.data.kind === 'practice');
+const featured = writing.slice(0, 3);
+
+const jsonLd = [
+  {
+    '@type': 'ItemList',
+    '@id': 'https://agenticanalyticsnow.com/#stack',
+    name: 'The agentic analytics stack',
+    itemListElement: stack.map((entry, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: entry.data.title,
+      url: `https://agenticanalyticsnow.com/knowledge-base/${entry.id}`,
+    })),
+  },
+];
+---
+
+<Base
+  title="Agentic Analytics Now"
+  description="AI agents plus unified governed semantic data equals agentic analytics. The agent stack of model, harness, and open interfaces, and why an open lakehouse built on Iceberg, Polaris, Arrow, Parquet, and Ossie is the substrate that makes it work enterprise wide."
+  jsonLd={jsonLd}
+  keywords={['agentic analytics', 'AI agents', 'open lakehouse', 'semantic layer', 'Apache Iceberg', 'Apache Polaris', 'Apache Arrow', 'Apache Parquet', 'Apache Ossie', 'data governance', 'Model Context Protocol']}
+>
+  <section class="hero">
+    <div class="shell">
+      <div class="hero__copy">
+        <p class="eyebrow">Agents plus governed data</p>
+        <h1>Analytics that answers the follow-up question.</h1>
+        <p class="hero__lede">
+          An AI agent can do an analyst's work: read a question, find the data, run the query, check
+          the result, and try again. What decides whether it is right is not the model. It is
+          whether the data underneath has one definition, one copy, and one place access is
+          enforced.
+        </p>
+        <div class="hero__actions">
+          <a class="button" href="/the-stack">See the stack</a>
+          <a class="button button--ghost" href="/knowledge-base">Read the knowledge base</a>
+        </div>
+      </div>
+
+      <EquationHero />
+    </div>
+  </section>
+
+  <section class="claim">
+    <div class="shell claim__grid">
+      <div>
+        <h2>Either half alone gets you a demo.</h2>
+      </div>
+      <div class="claim__body">
+        <p>
+          Agents without governed data are fluent and wrong, at machine speed, with nobody checking.
+          Governed data without agents is a well-run warehouse that still answers questions in a
+          week.
+        </p>
+        <p>
+          Put them together and the long tail of questions, the ones that were never worth an
+          analyst's time, becomes answerable. That is the whole proposition, and most of the work
+          is on the data side.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="shell band">
+    <div class="band__head">
+      <h2>Start here</h2>
+      <p>What the term means, how it differs from the dashboard era, and why the earlier attempt at this stalled.</p>
+    </div>
+    <ul class="cards cards--agent">
+      {opening.map((entry) => (
+        <li>
+          <a href={`/knowledge-base/${entry.id}`}>
+            <strong>{entry.data.title}</strong>
+            <span>{entry.data.summary}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="stack-band">
+    <div class="shell">
+      <div class="band__head band__head--dark">
+        <p class="eyebrow" style="color: var(--result);">Three layers, three failure modes</p>
+        <h2>An agent is not a model</h2>
+        <p>
+          It is a model inside a loop, reaching outside itself through interfaces. Knowing which of
+          the three is failing is most of debugging one.
+        </p>
+      </div>
+      <ul class="cards cards--dark">
+        {stack.map((entry) => (
+          <li>
+            <a href={`/knowledge-base/${entry.id}`}>
+              <strong>{entry.data.title}</strong>
+              <span>{entry.data.summary}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p class="band__more band__more--dark"><a href="/the-stack">The stack, drawn out</a></p>
+    </div>
+  </section>
+
+  <section class="shell substrate">
+    <div class="substrate__grid">
+      <div>
+        <p class="eyebrow" style="color: var(--data);">The other half</p>
+        <h2>Why an open lakehouse</h2>
+        <p>
+          Agents multiply readers, multiply questions, and multiply the temptation to make a private
+          copy. An architecture where the data sits in open formats, with one catalog deciding
+          access, gets better under that pressure. One where reading requires a particular vendor's
+          engine gets more expensive.
+        </p>
+        <p>
+          Five Apache projects settle five separate questions. Each one is a specification with more
+          than one implementation, which is the property that makes the stack assemblable at all.
+        </p>
+        <p class="band__more"><a href="/knowledge-base#substrate">All seven substrate entries</a></p>
+      </div>
+      <SubstrateDiagram />
+    </div>
+  </section>
+
+  <section class="shell band">
+    <div class="band__head">
+      <h2>Running it for real</h2>
+      <p>The part that decides whether a pilot becomes a capability: identity, evaluation, cost, and the order to do the work in.</p>
+    </div>
+    <ul class="cards cards--practice">
+      {practice.map((entry) => (
+        <li>
+          <a href={`/knowledge-base/${entry.id}`}>
+            <strong>{entry.data.title}</strong>
+            <span>{entry.data.summary}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="shell band">
+    <div class="band__head">
+      <h2>Longer reads</h2>
+      <p>Published pieces that carry parts of this argument in more depth.</p>
+    </div>
+    <ul class="pieces">
+      {featured.map((item) => (
+        <li>
+          <a href={item.url} rel="noopener">
+            <span class="pieces__tag">{item.tag}</span>
+            <strong>{item.title}</strong>
+            <span class="pieces__note">{item.note}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+    <p class="band__more"><a href="/writing">Everything else, including video and community</a></p>
+  </section>
+
+  <section class="shell channels">
+    {channels.map((channel) => (
+      <a class="channel" href={channel.url} rel="noopener">
+        <strong>{channel.name}</strong>
+        <span>{channel.description}</span>
+        <em>{channel.action}</em>
+      </a>
+    ))}
+  </section>
+</Base>
+
+<style>
+  .hero { padding: 3.25rem 0 3.5rem; background: var(--paper-raised); border-bottom: 1px solid var(--rule); }
+  .hero__copy { max-width: 46rem; margin-bottom: 3rem; }
+  .hero h1 { margin-bottom: 1.3rem; max-width: 15ch; }
+  .hero__lede { font-size: 1.12rem; color: var(--ink-soft); max-width: 40rem; }
+  .hero__actions { display: flex; flex-wrap: wrap; gap: 0.9rem; margin-top: 1.9rem; }
+
+  .claim { background: var(--void-900); color: #e9ecf7; padding: 3.25rem 0; }
+  .claim__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+  .claim h2 { color: #fff; max-width: 16ch; }
+  .claim__body p { color: #a9b1cc; }
+  .claim__body p:last-child { margin-bottom: 0; }
+
+  .band { padding: 3.5rem 0 1rem; }
+  .band__head { max-width: 44rem; margin-bottom: 1.75rem; }
+  .band__head h2 { margin: 0 0 0.55rem; }
+  .band__head p { color: var(--ink-soft); margin: 0; }
+  .band__head--dark h2 { color: #fff; }
+  .band__head--dark p { color: #a9b1cc; }
+  .band__more { margin: 1.6rem 0 0; font-weight: 650; font-size: 0.95rem; }
+  .band__more--dark a { color: var(--result); }
+
+  .cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1rem; }
+  .cards a {
+    display: grid; gap: 0.4rem; height: 100%; padding: 1.3rem 1.25rem; text-decoration: none;
+    background: var(--paper-raised); border: 1px solid var(--rule); border-top: 3px solid var(--agent);
+    border-radius: var(--radius); transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .cards a:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(13, 16, 32, .09); }
+  .cards strong { font-family: var(--display); font-size: 1.06rem; letter-spacing: -0.02em; }
+  .cards span { font-size: 0.88rem; color: var(--ink-soft); line-height: 1.5; }
+  .cards--practice a { border-top-color: var(--result); }
+
+  .stack-band {
+    background: var(--void-800); color: #e9ecf7; padding: 3.75rem 0; margin-top: 3rem;
+    background-image: radial-gradient(circle at 82% 14%, rgba(124, 92, 255, .22), transparent 44%);
+  }
+  .cards--dark a { background: rgba(255,255,255,.05); border-color: rgba(255,255,255,.13); border-top-color: var(--signal); }
+  .cards--dark a:hover { background: rgba(255,255,255,.09); box-shadow: none; }
+  .cards--dark strong { color: #fff; }
+  .cards--dark span { color: #a9b1cc; }
+
+  .substrate { padding: 4rem 0 2rem; }
+  .substrate__grid { display: grid; grid-template-columns: 1fr 1.05fr; gap: 3.5rem; align-items: center; }
+  .substrate h2 { margin: 0 0 0.9rem; }
+  .substrate p { color: var(--ink-soft); }
+
+  .pieces { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule); }
+  .pieces li { border-bottom: 1px solid var(--rule); }
+  .pieces a { display: grid; gap: 0.3rem; padding: 1.25rem 0.25rem; text-decoration: none; }
+  .pieces a:hover { background: var(--paper-raised); }
+  .pieces__tag { font: 600 0.7rem var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--data); }
+  .pieces strong { font-family: var(--display); font-size: 1.12rem; }
+  .pieces__note { color: var(--ink-soft); font-size: 0.93rem; }
+
+  .channels { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1.1rem; padding: 2.5rem 0 3rem; }
+  .channel { display: grid; gap: 0.45rem; padding: 1.4rem 1.25rem; text-decoration: none; border: 1px solid var(--rule); background: var(--paper-raised); border-radius: var(--radius); }
+  .channel:hover { border-color: var(--data); }
+  .channel strong { font-family: var(--display); font-size: 1.1rem; }
+  .channel span { font-size: 0.89rem; color: var(--ink-soft); }
+  .channel em { font-style: normal; font-size: 0.84rem; font-weight: 650; color: var(--data); }
+
+  @media (max-width: 920px) {
+    .claim__grid, .substrate__grid { grid-template-columns: 1fr; gap: 1.75rem; }
+    .claim h2 { max-width: none; }
+  }
+</style>

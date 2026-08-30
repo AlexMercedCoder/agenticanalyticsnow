@@ -1,0 +1,175 @@
+---
+import Base from '../layouts/Base.astro';
+import { writing, channels, playlists, sisterSites, community } from '../data/work';
+
+const jsonLd = [{
+  '@type': 'CollectionPage',
+  '@id': 'https://agenticanalyticsnow.com/writing#page',
+  name: 'Writing and video on agentic analytics',
+  url: 'https://agenticanalyticsnow.com/writing',
+  description:
+    'Selected articles, YouTube playlists, community spaces, and sister sites covering agentic analytics and the open lakehouse underneath it.',
+  isPartOf: { '@id': 'https://agenticanalyticsnow.com/#website' },
+  about: { '@id': 'https://alexmerced.com/#alexmerced' },
+  mainEntity: {
+    '@type': 'ItemList',
+    itemListElement: writing.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.title,
+      url: item.url,
+    })),
+  },
+}];
+---
+
+<Base
+  title="Writing and video"
+  description="Articles from the Dremio blog, YouTube playlists, community spaces, and the sister sites covering agentic analytics, semantic layers, and the open lakehouse."
+  jsonLd={jsonLd}
+  keywords={['agentic analytics articles', 'Alex Merced', 'Dremio blog', 'lakehouse video', 'Data Lakehouse Hub']}
+>
+  <section class="page-head">
+    <div class="shell">
+      <p class="eyebrow">Where the rest of it is</p>
+      <h1>Writing, video, and the wider network</h1>
+      <p class="page-head__lede">
+        This site is the compact version of an argument I have been making in longer form for a
+        while. Here is where the longer form lives, along with the neighbouring sites that go deeper
+        on each half of it.
+      </p>
+    </div>
+  </section>
+
+  <section class="shell block">
+    <h2>Articles</h2>
+    <p class="block__note">
+      Ordered the way this site presents the subject: what agentic analytics is, then the semantics
+      and governance it depends on, then the architecture underneath.
+    </p>
+    <ul class="pieces">
+      {writing.map((item) => (
+        <li>
+          <a href={item.url} rel="noopener">
+            <span class="pieces__tag">{item.tag}</span>
+            <strong>{item.title}</strong>
+            <span class="pieces__note">{item.note}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+    <p class="block__more">
+      <a href="https://www.dremio.com/blog/author/alex-merced/" rel="noopener">The full Dremio blog archive</a>
+    </p>
+  </section>
+
+  <section class="block block--dark">
+    <div class="shell">
+      <h2>Channels</h2>
+      <div class="channel-grid">
+        {channels.map((channel) => (
+          <a class="channel-card" href={channel.url} rel="noopener">
+            <strong>{channel.name}</strong>
+            <span>{channel.description}</span>
+            <em>{channel.action}</em>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="shell block">
+    <h2>Video playlists</h2>
+    <p class="block__note">Both halves of the subject, since people arrive at this from either side.</p>
+    <ul class="playlists">
+      {playlists.map((playlist) => (
+        <li>
+          <a href={playlist.url} rel="noopener">
+            <strong>{playlist.title}</strong>
+            <span>{playlist.note}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="shell block">
+    <h2>Sister sites</h2>
+    <p class="block__note">
+      This site is deliberately narrow. Each of these takes one part of it further.
+    </p>
+    <ul class="sisters">
+      {sisterSites.map((site) => (
+        <li>
+          <a href={site.url} rel="noopener">
+            <strong>{site.label}</strong>
+            <span>{site.note}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="shell block">
+    <h2>Community</h2>
+    <p class="block__note">Places to ask, argue, or find out what somebody else already ran into.</p>
+    <ul class="community">
+      {community.map((item) => (
+        <li><a href={item.url} rel="noopener">{item.label}</a></li>
+      ))}
+    </ul>
+    <p class="block__more"><a href="/books">The books on these subjects</a></p>
+  </section>
+</Base>
+
+<style>
+  .page-head { background: var(--paper-raised); padding: 3rem 0 2.75rem; border-bottom: 1px solid var(--rule); }
+  .page-head h1 { margin: 0 0 1rem; }
+  .page-head__lede { max-width: 44rem; font-size: 1.06rem; color: var(--ink-soft); margin: 0; }
+
+  .block { padding: 3rem 0 1rem; }
+  .block h2 { margin: 0 0 0.55rem; }
+  .block__note { max-width: 44rem; color: var(--ink-soft); margin: 0 0 1.75rem; }
+  .block__more { margin: 1.5rem 0 0; font-weight: 650; }
+
+  .block--dark {
+    background: var(--void-800); color: #e9ecf7; padding: 3.25rem 0; margin: 2.5rem 0 0;
+    background-image: radial-gradient(circle at 85% 20%, rgba(124, 92, 255, .2), transparent 45%);
+  }
+  .block--dark h2 { color: #fff; margin-bottom: 1.5rem; }
+
+  .pieces { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule); }
+  .pieces li { border-bottom: 1px solid var(--rule); }
+  .pieces a { display: grid; gap: 0.3rem; padding: 1.2rem 0.25rem; text-decoration: none; }
+  .pieces a:hover { background: var(--paper-raised); }
+  .pieces__tag { font: 600 0.7rem var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--data); }
+  .pieces strong { font-family: var(--display); font-size: 1.1rem; }
+  .pieces__note { color: var(--ink-soft); font-size: 0.92rem; }
+
+  .channel-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 1rem; }
+  .channel-card {
+    display: grid; gap: 0.45rem; padding: 1.35rem 1.25rem; text-decoration: none;
+    background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.13);
+    border-top: 3px solid var(--result); border-radius: var(--radius);
+  }
+  .channel-card:hover { background: rgba(255,255,255,.09); }
+  .channel-card strong { font-family: var(--display); font-size: 1.08rem; color: #fff; }
+  .channel-card span { font-size: 0.87rem; color: #a9b1cc; }
+  .channel-card em { font-style: normal; font-size: 0.82rem; font-weight: 650; color: var(--result); }
+
+  .playlists, .sisters { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: 1rem; }
+  .playlists a, .sisters a {
+    display: grid; gap: 0.35rem; height: 100%; padding: 1.25rem 1.2rem; text-decoration: none;
+    border: 1px solid var(--rule); background: var(--paper-raised); border-radius: var(--radius);
+  }
+  .playlists a:hover, .sisters a:hover { border-color: var(--agent); }
+  .playlists strong, .sisters strong { font-family: var(--display); font-size: 1.05rem; }
+  .playlists span, .sisters span { font-size: 0.89rem; color: var(--ink-soft); }
+
+  .community { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.6rem; }
+  .community a {
+    display: inline-block; padding: 0.5rem 0.9rem; text-decoration: none; font-size: 0.92rem;
+    font-weight: 600; border: 1px solid var(--rule); border-radius: 999px; background: var(--paper-raised);
+  }
+  .community a:hover { background: var(--void-900); color: #fff; border-color: var(--void-900); }
+</style>

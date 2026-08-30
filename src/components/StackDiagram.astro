@@ -1,0 +1,70 @@
+---
+/**
+ * The agentic stack: model, harness, open interfaces, sitting on the governed
+ * data. Animated as a request travelling down the interfaces and a grounded
+ * answer coming back up.
+ */
+const layers = [
+  { id: 'model', label: 'Model', note: 'Reasons over what it is given', color: 'var(--agent)', y: 16 },
+  { id: 'harness', label: 'Harness', note: 'Runs the loop, holds context, calls tools', color: 'var(--signal)', y: 84 },
+  { id: 'interfaces', label: 'Open interfaces', note: 'MCP, Iceberg REST, Arrow Flight, SQL', color: 'var(--data)', y: 152 },
+  { id: 'data', label: 'Governed semantic data', note: 'One copy, defined once, access decided once', color: 'var(--result)', y: 220 },
+];
+---
+
+<figure class="stack" role="img" aria-labelledby="stack-title" aria-describedby="stack-desc">
+  <figcaption class="sr">
+    <span id="stack-title">The agentic analytics stack</span>
+    <span id="stack-desc">
+      Four layers. A model reasons. A harness runs the loop and calls tools. Open interfaces carry
+      the request. Underneath sits governed semantic data in an open lakehouse. Requests travel
+      down and grounded answers travel back up.
+    </span>
+  </figcaption>
+
+  <svg viewBox="0 0 520 300" class="stack__svg" aria-hidden="true">
+    {layers.map((layer, index) => (
+      <g class="row" style={`--i:${index}`}>
+        <rect class="row__band" x="72" y={layer.y} width="416" height="56" rx="8" style={`--c:${layer.color}`} />
+        <rect class="row__edge" x="72" y={layer.y} width="5" height="56" rx="2.5" style={`--c:${layer.color}`} />
+        <text class="row__label" x="92" y={layer.y + 25}>{layer.label}</text>
+        <text class="row__note" x="92" y={layer.y + 43}>{layer.note}</text>
+      </g>
+    ))}
+
+    <g class="wire" aria-hidden="true">
+      <path class="wire__line" d="M40 40v220" />
+      <circle class="wire__down" cx="40" cy="40" r="5" />
+      <circle class="wire__up" cx="40" cy="260" r="5" />
+    </g>
+
+    <text class="axis axis--down" x="18" y="34" transform="rotate(-90 18 34)">request</text>
+    <text class="axis axis--up" x="18" y="278" transform="rotate(-90 18 278)">answer</text>
+  </svg>
+</figure>
+
+<style>
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .stack { margin: 0; }
+  .stack__svg { width: 100%; height: auto; display: block; }
+
+  .row__band { fill: var(--c); opacity: .1; stroke: var(--c); stroke-opacity: .35; animation: hum 5.6s ease-in-out infinite; animation-delay: calc(var(--i) * .28s); }
+  .row__edge { fill: var(--c); }
+  .row__label { font: 700 16px var(--display); fill: var(--ink); letter-spacing: -.02em; }
+  .row__note { font: 400 12px var(--sans); fill: var(--ink-soft); }
+
+  .wire__line { stroke: var(--rule); stroke-width: 2; }
+  .wire__down { fill: var(--agent); animation: descend 5.6s ease-in-out infinite; }
+  .wire__up { fill: var(--result); animation: ascend 5.6s ease-in-out infinite; }
+
+  .axis { font: 600 10px var(--mono); letter-spacing: .12em; text-transform: uppercase; fill: var(--ink-faint); }
+
+  @keyframes hum { 0%, 100% { opacity: .08; } 50% { opacity: .2; } }
+  @keyframes descend { 0% { transform: translateY(0); opacity: 0; } 8% { opacity: 1; } 42% { transform: translateY(220px); opacity: 1; } 50%, 100% { transform: translateY(220px); opacity: 0; } }
+  @keyframes ascend { 0%, 50% { transform: translateY(0); opacity: 0; } 58% { opacity: 1; } 92% { transform: translateY(-220px); opacity: 1; } 100% { transform: translateY(-220px); opacity: 0; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .row__band { animation: none; opacity: .14; }
+    .wire__down, .wire__up { animation: none; opacity: 1; }
+  }
+</style>

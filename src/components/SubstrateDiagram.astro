@@ -1,0 +1,75 @@
+---
+/**
+ * The five Apache projects under agentic analytics, and what each one settles.
+ * Arrow is drawn as the channel beside the stack rather than a band, because
+ * that is what it is: the shape data takes while it moves.
+ */
+const bands = [
+  { name: 'Apache Ossie', role: 'Semantics: what the metric means', color: 'var(--result)', y: 18 },
+  { name: 'Apache Polaris', role: 'Catalog: what exists and who may read it', color: 'var(--signal)', y: 82 },
+  { name: 'Apache Iceberg', role: 'Tables: commits, schema, history', color: 'var(--data)', y: 146 },
+  { name: 'Apache Parquet', role: 'Files: columnar bytes on object storage', color: 'var(--void-600)', y: 210 },
+];
+---
+
+<figure class="sub" role="img" aria-labelledby="sub-title" aria-describedby="sub-desc">
+  <figcaption class="sr">
+    <span id="sub-title">The open lakehouse substrate</span>
+    <span id="sub-desc">
+      Apache Ossie defines the semantics, Apache Polaris holds the catalog and access decisions,
+      Apache Iceberg makes files behave as tables, and Apache Parquet stores the columnar bytes.
+      Apache Arrow carries the results out of that stack in memory.
+    </span>
+  </figcaption>
+
+  <svg viewBox="0 0 560 300" class="sub__svg" aria-hidden="true">
+    {bands.map((band, index) => (
+      <g style={`--i:${index}`}>
+        <rect class="sub__band" x="16" y={band.y} width="420" height="52" rx="8" style={`--c:${band.color}`} />
+        <rect class="sub__edge" x="16" y={band.y} width="5" height="52" rx="2.5" style={`--c:${band.color}`} />
+        <text class="sub__name" x="36" y={band.y + 24}>{band.name}</text>
+        <text class="sub__role" x="36" y={band.y + 41}>{band.role}</text>
+      </g>
+    ))}
+
+    <rect class="sub__arrow" x="460" y="18" width="84" height="244" rx="10" />
+    <text class="sub__arrow-name" x="502" y="132" text-anchor="middle">Apache</text>
+    <text class="sub__arrow-name" x="502" y="150" text-anchor="middle">Arrow</text>
+    <text class="sub__arrow-role" x="502" y="176" text-anchor="middle">in memory,</text>
+    <text class="sub__arrow-role" x="502" y="190" text-anchor="middle">on the wire</text>
+
+    <g class="flow">
+      <circle class="flow__dot" cx="502" cy="248" r="5" />
+      <circle class="flow__dot flow__dot--2" cx="502" cy="248" r="5" />
+      <circle class="flow__dot flow__dot--3" cx="502" cy="248" r="5" />
+    </g>
+  </svg>
+</figure>
+
+<style>
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .sub { margin: 0; }
+  .sub__svg { width: 100%; height: auto; display: block; }
+
+  .sub__band { fill: var(--c); opacity: .12; stroke: var(--c); stroke-opacity: .38; animation: glow 6s ease-in-out infinite; animation-delay: calc(var(--i) * .3s); }
+  .sub__edge { fill: var(--c); }
+  .sub__name { font: 700 15px var(--display); fill: var(--ink); letter-spacing: -.02em; }
+  .sub__role { font: 400 12px var(--sans); fill: var(--ink-soft); }
+
+  .sub__arrow { fill: none; stroke: var(--agent); stroke-opacity: .5; stroke-width: 1.5; stroke-dasharray: 6 6; }
+  .sub__arrow-name { font: 700 15px var(--display); fill: var(--agent); letter-spacing: -.02em; }
+  .sub__arrow-role { font: 400 11px var(--sans); fill: var(--ink-soft); }
+
+  .flow__dot { fill: var(--agent); animation: rise 3s linear infinite; }
+  .flow__dot--2 { animation-delay: 1s; }
+  .flow__dot--3 { animation-delay: 2s; }
+
+  @keyframes glow { 0%, 100% { opacity: .1; } 50% { opacity: .22; } }
+  @keyframes rise { 0% { transform: translateY(0); opacity: 0; } 12% { opacity: 1; } 82% { opacity: 1; } 100% { transform: translateY(-212px); opacity: 0; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sub__band { animation: none; opacity: .16; }
+    .flow__dot { animation: none; opacity: 0; }
+    .flow__dot--2 { opacity: 1; }
+  }
+</style>

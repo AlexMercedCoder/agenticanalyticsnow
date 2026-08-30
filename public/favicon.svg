@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Agentic Analytics Now">
+  <rect width="64" height="64" rx="14" fill="#080b18"/>
+  <circle cx="21" cy="21" r="8.5" fill="#7c5cff"/>
+  <path d="M35 21h13M41.5 14.5v13" stroke="#f0a03c" stroke-width="4.5" stroke-linecap="round"/>
+  <rect x="12" y="38" width="40" height="7" rx="3.5" fill="#12b5a3"/>
+  <rect x="12" y="49" width="40" height="7" rx="3.5" fill="#273159"/>
+</svg>

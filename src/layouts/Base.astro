@@ -1,0 +1,119 @@
+---
+import '../styles/global.css';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import WebMCP from '../components/WebMCP.astro';
+
+export interface Props {
+  title: string;
+  description: string;
+  /** Extra JSON-LD nodes merged into the site graph for this page. */
+  jsonLd?: Record<string, unknown>[];
+  keywords?: string[];
+  ogType?: 'website' | 'article';
+}
+
+const { title, description, jsonLd = [], keywords = [], ogType = 'website' } = Astro.props;
+
+const SITE = 'https://agenticanalyticsnow.com';
+const canonical = new URL(Astro.url.pathname.replace(/\/$/, '') || '/', SITE).href;
+const fullTitle = Astro.url.pathname === '/' ? title : `${title} | Agentic Analytics Now`;
+
+const baseGraph = [
+  {
+    '@type': 'WebSite',
+    '@id': `${SITE}/#website`,
+    name: 'Agentic Analytics Now',
+    alternateName: 'AgenticAnalyticsNow.com',
+    url: `${SITE}/`,
+    description:
+      'Analytics run by AI agents, on governed semantic data. The agentic stack of model, harness, and open interfaces, and why an open lakehouse is the substrate that makes it work enterprise wide.',
+    inLanguage: 'en-US',
+    publisher: { '@id': 'https://alexmerced.com/#alexmerced' },
+    about: [
+      { '@type': 'Thing', name: 'Agentic analytics' },
+      { '@type': 'Thing', name: 'AI agents' },
+      { '@type': 'Thing', name: 'Open data lakehouse' },
+      { '@type': 'Thing', name: 'Semantic layer' },
+    ],
+  },
+  {
+    '@type': 'Person',
+    '@id': 'https://alexmerced.com/#alexmerced',
+    name: 'Alex Merced',
+    url: 'https://alexmerced.com',
+    jobTitle: 'Head of Developer Relations',
+    worksFor: { '@type': 'Organization', name: 'Dremio', url: 'https://www.dremio.com' },
+    knowsAbout: [
+      'Agentic analytics',
+      'AI agents',
+      'Model Context Protocol',
+      'Semantic layers',
+      'Apache Iceberg',
+      'Apache Polaris',
+      'Apache Arrow',
+      'Apache Parquet',
+      'Open lakehouse architecture',
+    ],
+    sameAs: [
+      'https://alexmercedcoder.dev',
+      'https://alexmerceddata.com',
+      'https://openlakehouse.alexmerced.com',
+      'https://www.alexmercedai.com',
+      'https://github.com/alexmercedcoder',
+      'https://www.linkedin.com/in/alexmerced',
+      'https://www.youtube.com/@alexmerceddata',
+      'https://amdatalakehouse.substack.com',
+    ],
+  },
+];
+
+const graph = { '@context': 'https://schema.org', '@graph': [...baseGraph, ...jsonLd] };
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    {keywords.length > 0 && <meta name="keywords" content={keywords.join(', ')} />}
+    <link rel="canonical" href={canonical} />
+    <meta name="author" content="Alex Merced" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+    <meta name="theme-color" content="#080b18" />
+
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content="Agentic Analytics Now" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:image" content={`${SITE}/og.png`} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Agentic Analytics Now: AI agents plus unified governed semantic data" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={`${SITE}/og.png`} />
+    <meta name="twitter:creator" content="@AMdatalakehouse" />
+
+    <link rel="alternate" type="text/plain" href="/llms.txt" title="llms.txt" />
+    <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <script type="application/ld+json" set:html={JSON.stringify(graph)} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+    <WebMCP />
+    <SiteHeader path={Astro.url.pathname} />
+    <main id="main">
+      <slot />
+    </main>
+    <SiteFooter />
+  </body>
+</html>

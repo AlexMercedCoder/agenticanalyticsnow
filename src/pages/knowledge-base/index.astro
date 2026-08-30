@@ -1,0 +1,129 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+const groups = [
+  {
+    kind: 'agentic' as const,
+    title: 'What this is',
+    note: 'What agentic analytics means, how it differs from what came before, and where the earlier attempts stalled.',
+  },
+  {
+    kind: 'stack' as const,
+    title: 'The agentic stack',
+    note: 'Model, harness, and open interfaces. Three separable layers with three distinct failure modes.',
+  },
+  {
+    kind: 'substrate' as const,
+    title: 'The data substrate',
+    note: 'The open lakehouse underneath: what each Apache project settles, and where each one stops.',
+  },
+  {
+    kind: 'practice' as const,
+    title: 'Running it for real',
+    note: 'Governance, evaluation, cost, portability, and the order to do the work in.',
+  },
+];
+
+const entries = (await getCollection('kb')).sort((a, b) => a.data.order - b.data.order);
+
+const jsonLd = [
+  {
+    '@type': 'CollectionPage',
+    '@id': 'https://agenticanalyticsnow.com/knowledge-base#page',
+    name: 'Agentic analytics knowledge base',
+    url: 'https://agenticanalyticsnow.com/knowledge-base',
+    description:
+      'Reference entries on agentic analytics: the agent stack, the governed semantic data underneath, and the practice of running it across an enterprise.',
+    isPartOf: { '@id': 'https://agenticanalyticsnow.com/#website' },
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: entries.length,
+      itemListElement: entries.map((entry, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: entry.data.title,
+        url: `https://agenticanalyticsnow.com/knowledge-base/${entry.id}`,
+      })),
+    },
+  },
+];
+---
+
+<Base
+  title="Knowledge base"
+  description="Twenty reference entries on agentic analytics: the model, harness, and open interfaces that make an agent, the Apache projects that hold the governed data underneath, and what it takes to run the whole thing across an enterprise."
+  jsonLd={jsonLd}
+  keywords={['agentic analytics', 'AI agents', 'semantic layer', 'Apache Iceberg', 'Apache Polaris', 'data governance', 'knowledge base']}
+>
+  <section class="page-head">
+    <div class="shell">
+      <p class="eyebrow">Knowledge base</p>
+      <h1>The whole argument, one entry at a time</h1>
+      <p class="page-head__lede">
+        {entries.length} entries. They build one case: that agentic analytics is a stack rather than a
+        model, that its hard half is the data underneath, and that an open lakehouse is what makes
+        that half work for a whole organisation rather than one pilot team.
+      </p>
+    </div>
+  </section>
+
+  <div class="shell kb">
+    {groups.map((group) => {
+      const items = entries.filter((entry) => entry.data.kind === group.kind);
+      return (
+        <section class="kb__group" id={group.kind}>
+          <div class="kb__head">
+            <h2>{group.title}</h2>
+            <p>{group.note}</p>
+          </div>
+          <ul class="kb__list">
+            {items.map((entry) => (
+              <li>
+                <a href={`/knowledge-base/${entry.id}`}>
+                  <span class="kb__num">{String(entry.data.order).padStart(2, '0')}</span>
+                  <span class="kb__body">
+                    <strong>{entry.data.title}</strong>
+                    <span>{entry.data.summary}</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      );
+    })}
+  </div>
+</Base>
+
+<style>
+  .page-head { background: var(--paper-raised); padding: 3rem 0 2.75rem; border-bottom: 1px solid var(--rule); }
+  .page-head h1 { margin: 0 0 1rem; }
+  .page-head__lede { max-width: 44rem; font-size: 1.06rem; color: var(--ink-soft); margin: 0; }
+
+  .kb { padding: 3rem 0 1.5rem; display: grid; gap: 3rem; }
+  .kb__head { max-width: 44rem; margin-bottom: 1.5rem; }
+  .kb__head h2 { margin: 0 0 0.4rem; }
+  .kb__head p { color: var(--ink-soft); margin: 0; font-size: 0.96rem; }
+
+  .kb__list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr)); gap: 0.9rem; }
+  .kb__list a {
+    display: grid; grid-template-columns: auto 1fr; gap: 0.9rem; height: 100%;
+    padding: 1.15rem 1.2rem; text-decoration: none;
+    background: var(--paper-raised); border: 1px solid var(--rule); border-radius: var(--radius);
+    transition: border-color .15s ease, transform .15s ease;
+  }
+  .kb__list a:hover { border-color: var(--agent); transform: translateY(-2px); }
+  .kb__num { font: 600 0.78rem var(--mono); color: var(--agent); padding-top: 0.2rem; }
+  .kb__body { display: grid; gap: 0.3rem; }
+  .kb__body strong { font-family: var(--display); font-size: 1.05rem; letter-spacing: -0.02em; }
+  .kb__body span { font-size: 0.88rem; color: var(--ink-soft); line-height: 1.5; }
+
+  #agentic .kb__num { color: var(--agent); }
+  #stack .kb__num { color: var(--signal); }
+  #substrate .kb__num { color: var(--data); }
+  #practice .kb__num { color: var(--result); }
+  #stack .kb__list a:hover { border-color: var(--signal); }
+  #substrate .kb__list a:hover { border-color: var(--data); }
+  #practice .kb__list a:hover { border-color: var(--result); }
+</style>

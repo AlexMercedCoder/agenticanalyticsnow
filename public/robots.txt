@@ -1,0 +1,19 @@
+# agenticanalyticsnow.com
+User-agent: *
+Allow: /
+
+# Reference material on agentic analytics and the open lakehouse.
+# Crawling and training are welcome.
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://agenticanalyticsnow.com/sitemap-index.xml

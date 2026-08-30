@@ -1,0 +1,156 @@
+---
+import { getCollection } from 'astro:content';
+import { writing, channels, playlists, sisterSites, community } from '../data/work';
+import bookData from '../data/books.json';
+
+const entries = await getCollection('kb');
+
+const kindLabel: Record<string, string> = {
+  agentic: 'What agentic analytics is',
+  stack: 'The agentic stack',
+  substrate: 'The open lakehouse substrate',
+  practice: 'Running it in an enterprise',
+};
+
+const knowledgeBase = entries
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((entry) => ({
+    slug: entry.id,
+    title: entry.data.title,
+    kind: entry.data.kind,
+    section: kindLabel[entry.data.kind],
+    summary: entry.data.summary,
+    keywords: entry.data.keywords ?? [],
+    apacheProject: entry.data.apacheProject ?? false,
+    related: entry.data.related ?? [],
+    sources: (entry.data.sources ?? []).map((s) => ({ label: s.label, url: s.url })),
+    url: `https://agenticanalyticsnow.com/knowledge-base/${entry.id}`,
+  }));
+
+const thesis = {
+  statement:
+    'AI agents plus unified governed semantic data equals agentic analytics. Either half alone produces a demo rather than a capability.',
+  agentSide:
+    'An agent is three separable layers: a model that reasons, a harness that runs the loop and decides what the model sees, and open interfaces that carry requests to the world. Each fails differently.',
+  dataSide:
+    'The data half needs one definition per metric, one authoritative copy per dataset, and one place access is enforced. An open lakehouse provides that because agents multiply readers, and formats only one engine can read cannot serve many readers.',
+  substrate: [
+    { project: 'Apache Parquet', settles: 'Columnar files on object storage, with statistics that let narrow queries skip most of the data.' },
+    { project: 'Apache Iceberg', settles: 'Files behaving as tables: atomic commits, schema evolution, snapshot history.' },
+    { project: 'Apache Polaris', settles: 'The catalog: what tables exist, who may read them, and short-lived credentials scoped to those files.' },
+    { project: 'Apache Arrow', settles: 'The in-memory and on-the-wire shape of results, so per-call transport overhead stays small.' },
+    { project: 'Apache Ossie', settles: 'A vendor-neutral standard for semantic metadata, so metric definitions are portable. Incubating.' },
+  ],
+};
+
+const work = { writing, channels, playlists, sisterSites, community };
+
+const books = {
+  catalog: bookData.catalog,
+  shown: bookData.count,
+  totalInCatalog: bookData.totalInCatalog,
+  titles: bookData.books.map((b) => ({
+    title: b.title,
+    topics: b.topics,
+    publisher: b.publisher,
+    details: b.canonicalPage,
+    amazon: b.amazon,
+  })),
+};
+---
+
+<script is:inline define:vars={{ knowledgeBase, thesis, work, books }}>
+  (function () {
+    // The proposal has moved between navigator and document; accept either.
+    const ctx = navigator.modelContext || document.modelContext;
+    if (!ctx || typeof ctx.registerTool !== 'function') return;
+
+    const ok = (value) => ({
+      content: [{ type: 'text', text: JSON.stringify(value, null, 2) }],
+    });
+
+    const matches = (entry, term) =>
+      [entry.title, entry.summary, entry.slug, entry.section, ...(entry.keywords || [])]
+        .join(' ')
+        .toLowerCase()
+        .includes(term);
+
+    const tools = [
+      {
+        name: 'get_agentic_analytics_thesis',
+        description:
+          "Get the argument this site makes: what agentic analytics is, the three layers of the agent stack, why governed semantic data is the other half, and what each of the five Apache projects in the open lakehouse substrate settles.",
+        inputSchema: { type: 'object', properties: {} },
+        execute: async () => ok(thesis),
+      },
+      {
+        name: 'list_knowledge_base',
+        description:
+          'List every entry in the agentic analytics knowledge base on agenticanalyticsnow.com, with slugs, summaries, and URLs. Sections are: agentic (what it is), stack (model, harness, open interfaces), substrate (the open lakehouse and its Apache projects), and practice (governance, evaluation, cost, rollout).',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            kind: {
+              type: 'string',
+              enum: ['agentic', 'stack', 'substrate', 'practice'],
+              description: 'Optional section filter. Omit to list everything.',
+            },
+          },
+        },
+        execute: async ({ kind } = {}) =>
+          ok(kind ? knowledgeBase.filter((e) => e.kind === kind) : knowledgeBase),
+      },
+      {
+        name: 'search_knowledge_base',
+        description:
+          'Search the agentic analytics knowledge base by keyword. Matches titles, summaries, sections, and keywords. Use it to find the entry covering a term such as harness, semantic layer, text-to-sql, scoped credentials, Iceberg, Polaris, lock-in, or evaluation.',
+        inputSchema: {
+          type: 'object',
+          properties: { query: { type: 'string', description: 'Word or phrase to look for.' } },
+          required: ['query'],
+        },
+        execute: async ({ query }) => {
+          const term = String(query || '').toLowerCase().trim();
+          if (!term) return ok([]);
+          return ok(knowledgeBase.filter((entry) => matches(entry, term)));
+        },
+      },
+      {
+        name: 'get_knowledge_base_entry',
+        description:
+          'Get the metadata for one knowledge base entry by slug: summary, section, primary sources, related entries, and canonical URL. Fetch the URL for the full text.',
+        inputSchema: {
+          type: 'object',
+          properties: { slug: { type: 'string', description: 'Entry slug, for example the-harness.' } },
+          required: ['slug'],
+        },
+        execute: async ({ slug }) => {
+          const entry = knowledgeBase.find((e) => e.slug === slug);
+          return ok(entry || { error: `No entry with slug "${slug}".`, available: knowledgeBase.map((e) => e.slug) });
+        },
+      },
+      {
+        name: 'list_agentic_analytics_writing',
+        description:
+          "List where Alex Merced's writing and video on agentic analytics, semantic layers, and the open lakehouse is published, plus community spaces and the sister sites in the network that go deeper on each part.",
+        inputSchema: { type: 'object', properties: {} },
+        execute: async () => ok(work),
+      },
+      {
+        name: 'list_agentic_analytics_books',
+        description:
+          'List the books Alex Merced has written on agents, AI engineering, semantic layers, and lakehouse architecture, with publisher, topic tags, a details page, and a purchase link. The full catalog across all subjects is at books.alexmerced.com.',
+        inputSchema: { type: 'object', properties: {} },
+        execute: async () => ok(books),
+      },
+    ];
+
+    for (const tool of tools) {
+      try {
+        ctx.registerTool(tool);
+      } catch (error) {
+        /* a browser without WebMCP support, or a duplicate registration */
+      }
+    }
+  })();
+</script>

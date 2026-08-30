@@ -1,0 +1,90 @@
+---
+import { networkGroups, communityLinks, connectLinks, newsletter, TRADEMARK_NOTICE } from '../data/network';
+
+const year = new Date().getFullYear();
+---
+
+<section class="newsletter" id="newsletter">
+  <div class="shell newsletter__grid">
+    <div>
+      <p class="eyebrow" style="color: var(--result);">Two newsletters, one list</p>
+      <h2>Keep up with both halves of this.</h2>
+      <p>
+        Agentic analytics moves on two fronts at once. One newsletter covers the model and agent
+        side, the other covers what the Apache projects underneath are shipping. One subscription
+        gets you both, and neither costs anything.
+      </p>
+      <a class="button" href={newsletter.url} rel="noopener">Subscribe on Substack</a>
+    </div>
+    <div class="newsletter__editions">
+      {newsletter.editions.map((edition) => (
+        <div class="newsletter__edition">
+          <span>{edition.day}</span>
+          <strong>{edition.title}</strong>
+          <p>{edition.note}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="shell">
+    <div class="footer-lede">
+      <p class="eyebrow" style="color: var(--result); margin: 0;">AgenticAnalyticsNow.com</p>
+      <p>
+        Reference material on running analytics with AI agents: the agentic stack, the governed
+        semantic data underneath it, and why an open lakehouse is the substrate that makes it work
+        across a whole enterprise. Written by Alex Merced. One node in the Alex Merced network of
+        sites.
+      </p>
+    </div>
+
+    <nav class="footer-cols" aria-label="The Alex Merced network">
+      {networkGroups.map((group) => (
+        <div>
+          <h2>{group.title}</h2>
+          <ul>
+            {group.links.map((link) => (
+              <li><a href={link.url} rel="noopener">{link.label}</a></li>
+            ))}
+          </ul>
+        </div>
+      ))}
+      <div>
+        <h2>Community</h2>
+        <ul>
+          {communityLinks.map((link) => (
+            <li><a href={link.url} rel="noopener">{link.label}</a></li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <h2>Connect</h2>
+        <ul>
+          {connectLinks.map((link) => (
+            <li><a href={link.url} rel="noopener">{link.label}</a></li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <h2>This site</h2>
+        <ul>
+          <li><a href="/the-stack">The agentic stack</a></li>
+          <li><a href="/knowledge-base">Knowledge base</a></li>
+          <li><a href="/writing">Writing and video</a></li>
+          <li><a href="/books">Books</a></li>
+          <li><a href="/llms.txt">llms.txt</a></li>
+          <li><a href="/sitemap-index.xml">Sitemap</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <p class="trademark">{TRADEMARK_NOTICE}</p>
+
+    <div class="footer-bottom">
+      <span>&copy; {year} Alex Merced</span>
+      <span>Built with Astro. Static, no tracking, no cookies.</span>
+    </div>
+  </div>
+</footer>

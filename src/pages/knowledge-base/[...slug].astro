@@ -1,0 +1,209 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { TRADEMARK_NOTICE } from '../../data/network';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('kb');
+  return entries.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content, headings } = await render(entry);
+
+const all = (await getCollection('kb')).sort((a, b) => a.data.order - b.data.order);
+const related = entry.data.related
+  .map((slug: string) => all.find((candidate) => candidate.id === slug))
+  .filter(Boolean);
+
+const position = all.findIndex((candidate) => candidate.id === entry.id);
+const previous = position > 0 ? all[position - 1] : null;
+const next = position < all.length - 1 ? all[position + 1] : null;
+
+const toc = headings.filter((heading) => heading.depth === 2);
+const url = `https://agenticanalyticsnow.com/knowledge-base/${entry.id}`;
+
+const kindLabel: Record<string, string> = {
+  agentic: 'What this is',
+  stack: 'The agentic stack',
+  substrate: 'The data substrate',
+  practice: 'Running it for real',
+};
+
+const jsonLd = [
+  {
+    '@type': 'TechArticle',
+    '@id': `${url}#article`,
+    headline: entry.data.title,
+    name: entry.data.title,
+    description: entry.data.summary,
+    url,
+    inLanguage: 'en-US',
+    author: { '@id': 'https://alexmerced.com/#alexmerced' },
+    publisher: { '@id': 'https://alexmerced.com/#alexmerced' },
+    isPartOf: { '@id': 'https://agenticanalyticsnow.com/#website' },
+    articleSection: kindLabel[entry.data.kind],
+    keywords: entry.data.keywords.join(', '),
+    ...(entry.data.sources.length
+      ? { citation: entry.data.sources.map((source) => ({ '@type': 'CreativeWork', name: source.label, url: source.url })) }
+      : {}),
+  },
+  {
+    '@type': 'BreadcrumbList',
+    '@id': `${url}#breadcrumbs`,
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://agenticanalyticsnow.com/' },
+      { '@type': 'ListItem', position: 2, name: 'Knowledge base', item: 'https://agenticanalyticsnow.com/knowledge-base' },
+      { '@type': 'ListItem', position: 3, name: entry.data.title, item: url },
+    ],
+  },
+];
+---
+
+<Base
+  title={entry.data.title}
+  description={entry.data.summary}
+  jsonLd={jsonLd}
+  keywords={entry.data.keywords}
+  ogType="article"
+>
+  <article class="entry">
+    <div class="shell entry__head">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <span aria-hidden="true">/</span>
+        <a href="/knowledge-base">Knowledge base</a>
+      </nav>
+      <p class="eyebrow" data-kind={entry.data.kind}>{kindLabel[entry.data.kind]}</p>
+      <h1>{entry.data.title}</h1>
+      <p class="entry__summary">{entry.data.summary}</p>
+    </div>
+
+    <div class="shell entry__grid">
+      {toc.length > 1 && (
+        <aside class="toc" aria-label="On this page">
+          <h2>On this page</h2>
+          <ul>
+            {toc.map((heading) => (
+              <li><a href={`#${heading.slug}`}>{heading.text}</a></li>
+            ))}
+          </ul>
+        </aside>
+      )}
+
+      <div class="prose">
+        <Content />
+
+        {entry.data.sources.length > 0 && (
+          <section class="sources">
+            <h2>Primary sources</h2>
+            <ul>
+              {entry.data.sources.map((source) => (
+                <li>
+                  <a href={source.url} rel="noopener">{source.label}</a>
+                  {source.note && <span>{source.note}</span>}
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        {entry.data.apacheProject && <p class="notice">{TRADEMARK_NOTICE}</p>}
+      </div>
+    </div>
+
+    {related.length > 0 && (
+      <div class="shell related">
+        <h2>Related entries</h2>
+        <ul>
+          {related.map((item: any) => (
+            <li>
+              <a href={`/knowledge-base/${item.id}`}>
+                <strong>{item.data.title}</strong>
+                <span>{item.data.summary}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    <nav class="shell pager" aria-label="Knowledge base">
+      {previous ? (
+        <a class="pager__link" href={`/knowledge-base/${previous.id}`}>
+          <span>Previous</span>
+          <strong>{previous.data.title}</strong>
+        </a>
+      ) : <span />}
+      {next ? (
+        <a class="pager__link pager__link--next" href={`/knowledge-base/${next.id}`}>
+          <span>Next</span>
+          <strong>{next.data.title}</strong>
+        </a>
+      ) : <span />}
+    </nav>
+  </article>
+</Base>
+
+<style>
+  .entry__head { padding: 2.5rem 0 2rem; }
+  .crumbs { display: flex; gap: 0.5rem; font-size: 0.85rem; color: var(--ink-faint); margin-bottom: 1.25rem; }
+  .crumbs a { text-decoration: none; }
+  .crumbs a:hover { text-decoration: underline; }
+
+  .eyebrow[data-kind='stack'] { color: var(--signal); }
+  .eyebrow[data-kind='substrate'] { color: var(--data); }
+  .eyebrow[data-kind='practice'] { color: var(--result); }
+
+  .entry__head h1 { margin: 0 0 1rem; max-width: 22ch; }
+  .entry__summary { font-size: 1.12rem; color: var(--ink-soft); max-width: 46rem; margin: 0; }
+
+  .entry__grid { display: grid; grid-template-columns: 15rem 1fr; gap: 3.5rem; align-items: start; padding-bottom: 2rem; }
+
+  .toc { position: sticky; top: 5.5rem; }
+  .toc h2 { font: 600 0.7rem var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-faint); margin: 0 0 0.75rem; }
+  .toc ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; border-left: 2px solid var(--rule); }
+  .toc a { display: block; padding-left: 0.9rem; text-decoration: none; font-size: 0.88rem; color: var(--ink-soft); }
+  .toc a:hover { color: var(--agent); }
+
+  .prose { max-width: 44rem; font-size: 1.03rem; }
+  .prose :global(h2) { margin: 2.5rem 0 0.85rem; font-size: 1.5rem; scroll-margin-top: 5.5rem; }
+  .prose :global(h3) { margin: 1.9rem 0 0.6rem; }
+  .prose :global(p) { margin: 0 0 1.15em; }
+  .prose :global(ul), .prose :global(ol) { margin: 0 0 1.3em; padding-left: 1.3rem; }
+  .prose :global(li) { margin-bottom: 0.5rem; }
+  .prose :global(strong) { font-weight: 650; }
+  .prose :global(a) { color: var(--agent); text-underline-offset: 3px; }
+  .prose :global(code) { font: 0.9em var(--mono); background: rgba(124, 92, 255, .1); padding: 0.12em 0.36em; border-radius: 4px; }
+
+  .sources { margin-top: 3rem; padding-top: 1.75rem; border-top: 1px solid var(--rule); }
+  .sources h2 { font-size: 1.15rem; margin: 0 0 1rem; }
+  .sources ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.9rem; }
+  .sources a { font-weight: 650; text-decoration: none; color: var(--agent); }
+  .sources a:hover { text-decoration: underline; }
+  .sources span { display: block; font-size: 0.9rem; color: var(--ink-soft); }
+
+  .notice { margin-top: 2rem; font-size: 0.82rem; color: var(--ink-faint); border-left: 3px solid var(--rule); padding-left: 1rem; }
+
+  .related { padding: 2.5rem 0; border-top: 1px solid var(--rule); }
+  .related h2 { font-size: 1.3rem; margin: 0 0 1.25rem; }
+  .related ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: 1rem; }
+  .related a { display: grid; gap: 0.3rem; height: 100%; padding: 1.15rem 1.15rem; text-decoration: none; background: var(--paper-raised); border: 1px solid var(--rule); border-radius: var(--radius); }
+  .related a:hover { border-color: var(--agent); }
+  .related strong { font-family: var(--display); font-size: 1.02rem; }
+  .related span { font-size: 0.86rem; color: var(--ink-soft); }
+
+  .pager { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; padding: 0 0 3rem; }
+  .pager__link { display: grid; gap: 0.25rem; padding: 1.1rem 1.2rem; text-decoration: none; border: 1px solid var(--rule); border-radius: var(--radius); background: var(--paper-raised); }
+  .pager__link:hover { border-color: var(--agent); }
+  .pager__link span { font: 600 0.7rem var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-faint); }
+  .pager__link strong { font-family: var(--display); font-size: 1rem; }
+  .pager__link--next { text-align: right; }
+
+  @media (max-width: 900px) {
+    .entry__grid { grid-template-columns: 1fr; gap: 2rem; }
+    .toc { position: static; }
+    .pager { grid-template-columns: 1fr; }
+    .pager__link--next { text-align: left; }
+  }
+</style>

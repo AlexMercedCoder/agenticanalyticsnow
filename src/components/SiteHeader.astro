@@ -1,0 +1,40 @@
+---
+import MobileNav from './MobileNav.astro';
+
+const { path = '/' } = Astro.props;
+
+const nav = [
+  { label: 'The stack', href: '/the-stack' },
+  { label: 'Knowledge base', href: '/knowledge-base' },
+  { label: 'Writing', href: '/writing' },
+  { label: 'Books', href: '/books' },
+];
+
+const isCurrent = (href: string) =>
+  href === '/' ? path === '/' : path === href || path.startsWith(href + '/');
+---
+
+<header class="site-header">
+  <div class="shell site-header__inner">
+    <a class="brand" href="/" aria-label="AgenticAnalyticsNow home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true">
+        <rect width="34" height="34" rx="8" fill="var(--void-900)" />
+        <circle cx="11" cy="11" r="4.4" fill="var(--agent)" />
+        <rect x="6.6" y="21" width="20.8" height="4.2" rx="2.1" fill="var(--data)" />
+        <path d="M18.5 9.2h8.6M22.8 5v8.4" stroke="var(--result)" stroke-width="2.4" stroke-linecap="round" />
+      </svg>
+      <span class="brand__text">
+        <strong>Agentic Analytics Now</strong>
+        <span>Agents plus governed data</span>
+      </span>
+    </a>
+
+    <nav class="desktop-nav" aria-label="Primary">
+      {nav.map((item) => (
+        <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a>
+      ))}
+    </nav>
+
+    <MobileNav items={[...nav, { label: 'Newsletters', href: '/#newsletter' }]} />
+  </div>
+</header>
