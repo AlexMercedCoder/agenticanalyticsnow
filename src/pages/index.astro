@@ -4,6 +4,7 @@ import Base from '../layouts/Base.astro';
 import EquationHero from '../components/EquationHero.astro';
 import SubstrateDiagram from '../components/SubstrateDiagram.astro';
 import { writing, channels } from '../data/work';
+import HomeFilmShowcase from '../components/HomeFilmShowcase.astro';
 
 const entries = (await getCollection('kb')).sort((a, b) => a.data.order - b.data.order);
 const opening = entries.filter((e) => e.data.kind === 'agentic');
@@ -52,6 +53,11 @@ const jsonLd = [
       <EquationHero />
     </div>
   </section>
+
+  <HomeFilmShowcase films={[
+    { title: 'The Iceberg Open Lakehouse', description: 'The governed, portable data foundation agents need before analytics can become truly agentic.', src: 'https://opendatalakehouse.com/the-iceberg-open-lakehouse.mp4', poster: 'https://opendatalakehouse.com/the-iceberg-open-lakehouse-poster.jpg', runtime: '7:50' },
+    { title: 'Open the Stack', description: 'A musical manifesto for open agent profiles, interchangeable models, and portable execution.', src: 'https://openagenticplatform.com/open-the-stack.mp4', poster: 'https://openagenticplatform.com/open-the-stack-poster.jpg', runtime: '7:37' },
+  ]} />
 
   <section class="claim">
     <div class="shell claim__grid">
