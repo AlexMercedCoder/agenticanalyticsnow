@@ -50,6 +50,7 @@ export const networkGroups: NetworkGroup[] = [
       { label: 'AlexMercedData.com', url: 'https://alexmerceddata.com' },
       { label: 'AlexMercedMedia.com', url: 'https://alexmercedmedia.com' },
       { label: 'Books by Alex Merced', url: 'https://books.alexmerced.com' },
+      { label: 'Branding.AlexMerced.com', url: 'https://branding.alexmerced.com' },
       { label: 'Resources', url: 'https://resources.alexmerced.com' },
     ],
   },
