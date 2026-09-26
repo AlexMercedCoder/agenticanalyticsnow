@@ -3,8 +3,8 @@
   "source": "https://alexmerced.com/entity/books.json",
   "catalog": "https://books.alexmerced.com/",
   "intro": "Books covering both halves of agentic analytics: the agents and AI systems doing the asking, the semantic and governance work that makes their answers trustworthy, and the lakehouse architecture holding the data underneath.",
-  "totalInCatalog": 66,
-  "count": 38,
+  "totalInCatalog": 77,
+  "count": 39,
   "books": [
     {
       "title": "AI and Agents for Normal People",
@@ -336,6 +336,22 @@
       "cover": "https://images.amazon.com/images/P/B0GWF7PFDG.01._SCLZZZZZZZ_.jpg",
       "canonicalPage": "https://books.alexmerced.com/books/dremio-and-the-semantic-layer/",
       "amazon": "https://www.amazon.com/dp/B0GWF7PFDG"
+    },
+    {
+      "title": "Building the Software Factory",
+      "slug": "building-the-software-factory",
+      "description": "Co-authored with Benedikt Stemmildt. How to turn AI coding agents into a dependable, team-wide software factory using context engineering, AI-TDD, harness design, and the AEMM and Elastic Loop frameworks, moving teams from vibe coding to disciplined agentic engineering.",
+      "category": "Tech",
+      "categorySlug": "tech",
+      "topics": [
+        "ai-productivity",
+        "ai-engineering"
+      ],
+      "publisher": "Packt Publishing",
+      "flagship": true,
+      "cover": "https://m.media-amazon.com/images/I/81-gPruyXyL._SL1500_.jpg",
+      "canonicalPage": "https://books.alexmerced.com/books/building-the-software-factory/",
+      "amazon": "https://www.amazon.com/dp/1807782778"
     },
     {
       "title": "Shipping AI: From Prototype to Production Systems",
