@@ -54,6 +54,16 @@ const jsonLd = [
     <StackDiagram />
   </section>
 
+  <section class="shell band" id="worked-example">
+    <div class="band__head"><h2>Worked question: why did net revenue fall?</h2><p>A realistic agent needs more than a plausible sentence.</p></div>
+    <ol>
+      <li><strong>Resolve the metric:</strong> fetch the governed definition of net revenue, allowed dimensions, calendar, and the caller’s access scope.</li>
+      <li><strong>Plan the query:</strong> compare the last complete month with the prior month by region, using only approved tables and joins.</li>
+      <li><strong>Execute and check:</strong> run parameterized SQL, validate row counts and null rates, and compare the sum of regional values with the overall metric.</li>
+      <li><strong>Answer with evidence:</strong> return the two periods, difference, top contributing regions, metric version, query reference, and Iceberg snapshot identifier. If permissions or data freshness prevent a reliable answer, say so.</li>
+    </ol>
+  </section>
+
   <section class="shell band">
     <div class="band__head">
       <h2>The agent, in three parts</h2>
