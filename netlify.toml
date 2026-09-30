@@ -5,6 +5,63 @@
 [build.environment]
   NODE_VERSION = "22"
 
+# P0.11: crawlers and people still ask for /sitemap.xml; the Astro sitemap is sitemap-index.xml.
+[[redirects]]
+  from = "/sitemap.xml"
+  to = "/sitemap-index.xml"
+  status = 301
+  force = true
+
+# P4.3: Apache project pages moved to the network's glossary owners (targets verified HTTP 200).
+# Record: docs-and-audits/network-audit-2026-09-29/redirect-maps/agenticanalyticsnow.com.csv
+[[redirects]]
+  from = "/knowledge-base/apache-arrow"
+  to = "https://opendatalakehouse.com/kb/apache-arrow/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/knowledge-base/apache-arrow/*"
+  to = "https://opendatalakehouse.com/kb/apache-arrow/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/knowledge-base/apache-parquet"
+  to = "https://opendatalakehouse.com/kb/parquet-format/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/knowledge-base/apache-parquet/*"
+  to = "https://opendatalakehouse.com/kb/parquet-format/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/knowledge-base/apache-polaris"
+  to = "https://opendatalakehouse.com/kb/polaris-catalog/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/knowledge-base/apache-polaris/*"
+  to = "https://opendatalakehouse.com/kb/polaris-catalog/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/knowledge-base/apache-iceberg"
+  to = "https://iceberglakehouse.com/apache-iceberg/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/knowledge-base/apache-iceberg/*"
+  to = "https://iceberglakehouse.com/apache-iceberg/"
+  status = 301
+  force = true
+
 [[headers]]
   for = "/llms.txt"
   [headers.values]
