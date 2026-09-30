@@ -111,7 +111,7 @@ export const readinessAreas: ReadinessArea[] = [
       },
       {
         text: 'List the words that mean different things to different teams, and give each meaning its own definition instead of one shared name.',
-        links: [{ label: 'Semantic layer (builder view)', href: `${AL}/kb/semantic-layer/` }],
+        links: [{ label: 'Pattern: a semantic layer for agents over MCP', href: `${AL}/patterns/semantic-layer-over-mcp/` }],
       },
       {
         text: 'Share with your team why schema alone does not get an agent to the right answer.',
@@ -166,13 +166,12 @@ export const readinessAreas: ReadinessArea[] = [
       {
         text: 'Move row and column rules out of individual tools and into the catalog or policy layer every engine reads through.',
         links: [
-          { label: 'Row-level security', href: `${AL}/kb/row-level-security/` },
-          { label: 'Column-level security', href: `${AL}/kb/column-level-security/` },
+          { label: 'Pattern: row and column policies for agents', href: `${AL}/patterns/row-and-column-policies-for-agents/` },
         ],
       },
       {
         text: 'Make sure the audit trail names the person behind each query, including queries an agent runs for them.',
-        links: [{ label: 'Governed AI querying (builder view)', href: `${AL}/kb/governed-ai-querying/` }],
+        links: [{ label: 'Pattern: agent-safe governed views', href: `${AL}/patterns/agent-safe-governed-views/` }],
       },
     ],
   },
@@ -273,13 +272,13 @@ export const readinessAreas: ReadinessArea[] = [
       },
       {
         text: 'Expose the catalog and semantic definitions to agents through an API or an MCP server, so discovery does not depend on prompts.',
-        links: [{ label: 'LLM data access (builder view)', href: `${AL}/kb/llm-data-access/` }],
+        links: [{ label: 'Pattern: query guardrails for agents', href: `${AL}/patterns/query-guardrails-for-agents/` }],
       },
       {
         text: 'Run the replacement-cost exercise for each layer of the stack before a vendor decision makes it expensive.',
         links: [
           { label: 'Portability and lock-in', href: '/knowledge-base/portability-and-lock-in/' },
-          { label: 'Lakehouse interoperability (builder view)', href: `${AL}/kb/lakehouse-interoperability/` },
+          { label: 'Pattern: an MCP server over an Iceberg catalog', href: `${AL}/patterns/mcp-server-over-iceberg-catalog/` },
         ],
       },
     ],
