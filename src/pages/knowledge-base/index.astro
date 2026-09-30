@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
+import LeaderTools from '../../components/LeaderTools.astro';
 
 const groups = [
   {
@@ -94,6 +95,8 @@ const jsonLd = [
       );
     })}
   </div>
+
+  <LeaderTools heading="Tools for analytics leaders" />
 </Base>
 
 <style>

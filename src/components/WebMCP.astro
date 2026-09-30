@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import { writing, channels, playlists, sisterSites, community } from '../data/work';
 import bookData from '../data/books.json';
 import { apacheProjects } from '../data/apache-projects';
+import { leaderTools, readinessAreas, readinessLevels, READINESS_WEAK_CAP, useCases, checklistAreas, playbookPhases, playbookRoles } from '../data/leader-tools';
 
 const entries = await getCollection('kb');
 
@@ -56,9 +57,21 @@ const books = {
     amazon: b.amazon,
   })),
 };
+
+const leader = {
+  tools: leaderTools.map((t) => ({ ...t, url: `https://agenticanalyticsnow.com${t.href}` })),
+  readiness: {
+    scoring: `Each answer scores 0 to 3 in the order listed. Overall level by percentage of the maximum: ${readinessLevels.map((l) => `${l.name} from ${Math.round(l.min * 100)}%`).join(', ')}. Any area at or below ${Math.round(READINESS_WEAK_CAP * 100)}% caps the level at Building.`,
+    areas: readinessAreas.map((a) => ({ id: a.id, title: a.title, questions: a.questions })),
+    levels: readinessLevels,
+  },
+  useCases,
+  evaluationChecklist: checklistAreas,
+  rolloutPlaybook: { roles: playbookRoles, phases: playbookPhases },
+};
 ---
 
-<script is:inline define:vars={{ knowledgeBase, thesis, work, books }}>
+<script is:inline define:vars={{ knowledgeBase, thesis, work, books, leader }}>
   (function () {
     // The proposal has moved between navigator and document; accept either.
     const ctx = navigator.modelContext || document.modelContext;
@@ -141,6 +154,28 @@ const books = {
           'List the books Alex Merced has written on agents, AI engineering, semantic layers, and lakehouse architecture, with publisher, topic tags, a details page, and a purchase link. The full catalog across all subjects is at books.alexmerced.com.',
         inputSchema: { type: 'object', properties: {} },
         execute: async () => ok(books),
+      },
+      {
+        name: 'get_analytics_leader_tools',
+        description:
+          'Get the analytics-leader tools on agenticanalyticsnow.com as data: the 15-question readiness assessment with its scoring rule and levels, the use-case library by business function, the vendor-neutral evaluation checklist, or the 90-day rollout playbook.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            tool: {
+              type: 'string',
+              enum: ['readiness', 'use-cases', 'evaluation-checklist', 'rollout-playbook'],
+              description: 'Which tool to return. Omit to list all four with their URLs.',
+            },
+          },
+        },
+        execute: async ({ tool } = {}) => {
+          if (tool === 'readiness') return ok(leader.readiness);
+          if (tool === 'use-cases') return ok(leader.useCases);
+          if (tool === 'evaluation-checklist') return ok(leader.evaluationChecklist);
+          if (tool === 'rollout-playbook') return ok(leader.rolloutPlaybook);
+          return ok(leader.tools);
+        },
       },
     ];
 

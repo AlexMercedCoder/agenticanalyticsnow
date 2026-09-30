@@ -6,6 +6,7 @@ import SubstrateDiagram from '../components/SubstrateDiagram.astro';
 import { writing, channels } from '../data/work';
 import HomeFilmShowcase from '../components/HomeFilmShowcase.astro';
 import { apacheProjects } from '../data/apache-projects';
+import { leaderTools } from '../data/leader-tools';
 
 const entries = (await getCollection('kb')).sort((a, b) => a.data.order - b.data.order);
 const opening = entries.filter((e) => e.data.kind === 'agentic');
@@ -24,6 +25,17 @@ const jsonLd = [
       position: index + 1,
       name: entry.data.title,
       url: `https://agenticanalyticsnow.com/knowledge-base/${entry.id}/`,
+    })),
+  },
+  {
+    '@type': 'ItemList',
+    '@id': 'https://agenticanalyticsnow.com/#leader-tools',
+    name: 'Tools for analytics leaders',
+    itemListElement: leaderTools.map((tool, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: tool.title,
+      url: `https://agenticanalyticsnow.com${tool.href}`,
     })),
   },
 ];
@@ -48,14 +60,33 @@ const jsonLd = [
           enforced. AI agents plus governed semantic data equals agentic analytics.
         </p>
         <div class="hero__actions">
-          <a class="button" href="/knowledge-base/what-is-agentic-analytics/">The case</a>
-          <a class="button button--ghost" href="/knowledge-base/enterprise-rollout/">The rollout</a>
-          <a class="button button--ghost" href="/the-stack/">What needs to be in place</a>
+          <a class="button" href="/readiness/" data-network-event="cta_readiness">Take the readiness assessment</a>
+          <a class="button button--ghost" href="/knowledge-base/what-is-agentic-analytics/">The case</a>
+          <a class="button button--ghost" href="/rollout-playbook/">The 90-day rollout</a>
         </div>
       </div>
 
       <EquationHero />
     </div>
+  </section>
+
+  <section class="shell band tools" aria-labelledby="tools-heading">
+    <div class="band__head">
+      <p class="eyebrow" style="color: var(--result);">Tools for analytics leaders</p>
+      <h2 id="tools-heading">Decide, choose, and roll out</h2>
+      <p>Four working tools, in the order most teams need them. Free, with no sign-up. The assessment is scored in your browser.</p>
+    </div>
+    <ol class="cards cards--tools">
+      {leaderTools.map((tool, index) => (
+        <li>
+          <a href={tool.href}>
+            <em>{index + 1}</em>
+            <strong>{tool.title}</strong>
+            <span>{tool.summary}</span>
+          </a>
+        </li>
+      ))}
+    </ol>
   </section>
 
   <HomeFilmShowcase films={[
@@ -231,6 +262,9 @@ const jsonLd = [
   .cards strong { font-family: var(--display); font-size: 1.06rem; letter-spacing: -0.02em; }
   .cards span { font-size: 0.88rem; color: var(--ink-soft); line-height: 1.5; }
   .cards--practice a { border-top-color: var(--result); }
+  .tools { padding-bottom: 3rem; }
+  .cards--tools a { border-top-color: var(--result); }
+  .cards--tools em { font: 600 0.72rem var(--mono); font-style: normal; letter-spacing: .12em; color: var(--result); }
 
   .stack-band {
     background: var(--void-800); color: #e9ecf7; padding: 3.75rem 0; margin-top: 3rem;

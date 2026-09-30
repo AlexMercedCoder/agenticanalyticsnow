@@ -6,6 +6,7 @@ import { newsletter } from '../data/network';
 import network from '../../network/network.json';
 import { apacheProjects } from '../data/apache-projects';
 import crosslinks from '../data/crosslinks.json';
+import { leaderTools, readinessAreas, useCases, checklistAreas, playbookPhases } from '../data/leader-tools';
 
 const SITE = 'https://agenticanalyticsnow.com';
 
@@ -30,6 +31,16 @@ The argument in one paragraph: an AI agent can do an analyst's work, taking a qu
 
 The site is static, has no login, and every page listed here is public.
 
+## Tools for analytics leaders
+
+${leaderTools.map((tool) => `- [${tool.title}](${SITE}${tool.href}): ${tool.summary}`).join('\n')}
+- [Evaluation checklist as Markdown](${SITE}/evaluation-checklist.md): the same ${checklistAreas.reduce((n, a) => n + a.items.length, 0)} questions, ready to paste into an RFP.
+- [Rollout playbook as Markdown](${SITE}/rollout-playbook.md): the same five phases with exit-criteria checkboxes.
+
+The readiness assessment covers five areas, three questions each: ${readinessAreas.map((a) => a.title).join('; ')}. Each answer scores 0 to 3; levels are Exploring (below 40%), Building (40%), Ready (65%), and Scaling (85%), and any area at 3 of 9 or less caps the level at Building. Scoring runs in the browser; a result is shareable as /readiness/#answers= followed by fifteen digits from 0 to 3.
+
+The use-case library covers ${useCases.slice(0, -1).map((u) => u.title.toLowerCase()).join(', ')}, and ${useCases[useCases.length - 1].title.toLowerCase()}. The playbook phases are ${playbookPhases.map((p) => `${p.weeks.toLowerCase()} (${p.title.toLowerCase()})`).join('; ')}.
+
 ${SECTIONS.map((section) => {
   const items = entries.filter((entry) => entry.data.kind === section.kind);
   return `## ${section.title}\n\n${items.map(line).join('\n')}`;
@@ -53,6 +64,7 @@ ${Object.entries(crosslinks.leaderToBuilder as Record<string, string>)
 ## Site pages
 
 - [Home](${SITE}/): the thesis, with the stack and the substrate summarised.
+- [Readiness assessment](${SITE}/readiness/), [Use-case library](${SITE}/use-cases/), [Evaluation checklist](${SITE}/evaluation-checklist/), [90-day rollout playbook](${SITE}/rollout-playbook/): the four leader tools.
 - [The stack](${SITE}/the-stack/): the four layers drawn out, top to bottom.
 - [Knowledge base](${SITE}/knowledge-base/): all ${entries.length} entries in four sections.
 - [Writing and video](${SITE}/writing/): articles, playlists, community, and sister sites.
@@ -105,7 +117,7 @@ All of Alex's sites: ${network.footer.allSitesUrl}
 
 ## Notes for agents
 
-- This site exposes read-only WebMCP tools in the browser: get_agentic_analytics_thesis, list_knowledge_base, search_knowledge_base, get_knowledge_base_entry, list_agentic_analytics_writing, and list_agentic_analytics_books.
+- This site exposes read-only WebMCP tools in the browser: get_agentic_analytics_thesis, list_knowledge_base, search_knowledge_base, get_knowledge_base_entry, list_agentic_analytics_writing, list_agentic_analytics_books, and get_analytics_leader_tools (readiness questions and scoring, use cases, evaluation checklist, rollout playbook).
 - Structured data is published as JSON-LD on every page, including WebSite, Person, TechArticle, BreadcrumbList, CollectionPage, ItemList, and Book nodes.
 - Apache Iceberg, Apache Polaris, Apache Parquet, Apache Arrow, and Apache Ossie are trademarks of the Apache Software Foundation. This site is independent and is not affiliated with or endorsed by the ASF.
 `;
