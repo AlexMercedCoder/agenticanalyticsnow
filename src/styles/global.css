@@ -179,6 +179,8 @@ p { margin: 0 0 1.1em; }
   display: flex; flex-wrap: wrap; gap: 1rem; justify-content: space-between; color: #7d86a5; font-size: 0.84rem;
 }
 .trademark { margin-top: 1.25rem; color: #6f7897; font-size: 0.8rem; max-width: 60rem; }
+.footer-all { margin-top: 1.5rem; font-weight: 650; }
+.footer-all a { color: var(--result); }
 
 @media (max-width: 760px) {
   :root { --shell: calc(100% - 2rem); }

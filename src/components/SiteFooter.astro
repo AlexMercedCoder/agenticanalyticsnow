@@ -1,5 +1,9 @@
 ---
-import { networkGroups, communityLinks, connectLinks, newsletter, TRADEMARK_NOTICE } from '../data/network';
+import { communityLinks, connectLinks, newsletter, TRADEMARK_NOTICE } from '../data/network';
+import network from '../../network/network.json';
+import NetworkCta from './NetworkCta.astro';
+
+const { groups, allSitesUrl, allSitesLabel } = network.footer;
 
 const year = new Date().getFullYear();
 ---
@@ -28,6 +32,8 @@ const year = new Date().getFullYear();
   </div>
 </section>
 
+<NetworkCta />
+
 <footer class="site-footer">
   <div class="shell">
     <div class="footer-lede">
@@ -35,18 +41,18 @@ const year = new Date().getFullYear();
       <p>
         Reference material on running analytics with AI agents: the agentic stack, the governed
         semantic data underneath it, and why an open lakehouse is the substrate that makes it work
-        across a whole enterprise. Written by Alex Merced. One node in the Alex Merced network of
-        sites.
+        across a whole enterprise. Written by Alex Merced for analytics leaders. One node in the Alex
+        Merced network of sites.
       </p>
     </div>
 
     <nav class="footer-cols" aria-label="The Alex Merced network">
-      {networkGroups.map((group) => (
+      {groups.map((group) => (
         <div>
           <h2>{group.title}</h2>
           <ul>
             {group.links.map((link) => (
-              <li><a href={link.url} rel="noopener">{link.label}</a></li>
+              <li><a href={link.url} rel="noopener">{link.title}</a></li>
             ))}
           </ul>
         </div>
@@ -70,21 +76,23 @@ const year = new Date().getFullYear();
       <div>
         <h2>This site</h2>
         <ul>
-          <li><a href="/the-stack">The agentic stack</a></li>
-          <li><a href="/knowledge-base">Knowledge base</a></li>
-          <li><a href="/writing">Writing and video</a></li>
-          <li><a href="/books">Books</a></li>
+          <li><a href="/the-stack/">The agentic stack</a></li>
+          <li><a href="/knowledge-base/">Knowledge base</a></li>
+          <li><a href="/writing/">Writing and video</a></li>
+          <li><a href="/books/">Books</a></li>
           <li><a href="/llms.txt">llms.txt</a></li>
           <li><a href="/sitemap-index.xml">Sitemap</a></li>
         </ul>
       </div>
     </nav>
 
+    <p class="footer-all"><a href={allSitesUrl} rel="noopener">{allSitesLabel} &rarr;</a></p>
+
     <p class="trademark">{TRADEMARK_NOTICE}</p>
 
     <div class="footer-bottom">
       <span>&copy; {year} Alex Merced</span>
-      <span>Built with Astro. Static, no tracking, no cookies.</span>
+      <span>Built with Astro. Visits are measured with Google Analytics.</span>
     </div>
   </div>
 </footer>
