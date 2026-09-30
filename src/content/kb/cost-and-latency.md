@@ -8,7 +8,7 @@ sources:
   - label: "The Economics of AI: Cost, Latency, and Infrastructure Tradeoffs"
     url: https://books.alexmerced.com/books/the-economics-of-ai-cost-latency-and-infrastructure-tradeoffs/
     note: Book-length treatment of the tradeoffs.
-related: [apache-arrow, apache-parquet, the-harness, enterprise-rollout]
+related: [one-copy-many-readers, why-the-lakehouse, the-harness, enterprise-rollout]
 ---
 
 Traditional analytics is a small number of large queries on a schedule. Agentic analytics is a large
@@ -23,13 +23,13 @@ by compute-second will often cost more in compute than in inference.
 
 **On repeated exploration.** An agent's third query is frequently a slight refinement of its second.
 Without pruning, each one is a full scan of the same data. This is where the
-[Parquet statistics and Iceberg manifests](/knowledge-base/apache-parquet) earn their place: the
+[Parquet statistics and Iceberg manifests](https://opendatalakehouse.com/kb/parquet-format/) earn their place: the
 narrow follow-up should cost far less than the first broad question, and with badly laid out data
 it costs the same.
 
 **On per-call overhead.** Connection setup, serialisation, and result transport are paid once per
 dashboard refresh and eight times per agent conversation.
-[Arrow and Flight](/knowledge-base/apache-arrow) exist to make that number small.
+[Arrow and Flight](https://opendatalakehouse.com/kb/apache-arrow/) exist to make that number small.
 
 **On retries.** An agent that fails a query and retries three times has spent four times the compute
 for one answer. Retry policy is a cost control, not just a reliability control.

@@ -46,7 +46,7 @@ represents and what it excludes.
 
 The SQL the model then writes is short, mostly obviously correct, and reviewable by a human in
 seconds. The hard reasoning about which table and which exclusions was done once, by people, and
-written down. See [the semantic layer as a contract](/knowledge-base/semantic-layer-as-contract).
+written down. See [the semantic layer as a contract](/knowledge-base/semantic-layer-as-contract/).
 
 This is a less exciting answer than a better model. It is also the one that works, and the work is
 reusable across every other consumer of the data.
@@ -58,5 +58,5 @@ text-to-sql feature is that it looks at the result, notices the row count is zer
 implausible, and tries again with a different approach.
 
 Single-shot generation has no opportunity to catch its own mistakes. That is the
-[harness](/knowledge-base/the-harness) layer's contribution, and it is why "text to sql" and
+[harness](/knowledge-base/the-harness/) layer's contribution, and it is why "text to sql" and
 "agentic analytics" are not the same product with different branding.

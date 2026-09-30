@@ -29,7 +29,7 @@ conversation. Across an enterprise it has to be written down or every agent pick
 whoever is asking, which requires identity propagation the pilot never built.
 
 **Copies appear.** Teams that cannot get access build workarounds. See
-[one copy, many readers](/knowledge-base/one-copy-many-readers).
+[one copy, many readers](/knowledge-base/one-copy-many-readers/).
 
 **Cost becomes visible.** Fifty users asking questions all day is a different number from five, and
 the architecture that was fine for the pilot may not be.

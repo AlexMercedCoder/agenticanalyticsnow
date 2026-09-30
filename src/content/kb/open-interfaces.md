@@ -14,7 +14,7 @@ sources:
   - label: Apache Polaris
     url: https://polaris.apache.org
     note: An open implementation of the Iceberg REST catalog protocol.
-related: [the-agentic-stack, apache-arrow, apache-polaris, portability-and-lock-in]
+related: [the-agentic-stack, the-harness, governance-for-agents, portability-and-lock-in]
 apacheProject: true
 ---
 

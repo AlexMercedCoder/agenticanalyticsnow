@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import { writing, channels, playlists, sisterSites, community } from '../data/work';
 import bookData from '../data/books.json';
+import { apacheProjects } from '../data/apache-projects';
 
 const entries = await getCollection('kb');
 
@@ -24,7 +25,7 @@ const knowledgeBase = entries
     apacheProject: entry.data.apacheProject ?? false,
     related: entry.data.related ?? [],
     sources: (entry.data.sources ?? []).map((s) => ({ label: s.label, url: s.url })),
-    url: `https://agenticanalyticsnow.com/knowledge-base/${entry.id}`,
+    url: `https://agenticanalyticsnow.com/knowledge-base/${entry.id}/`,
   }));
 
 const thesis = {
@@ -34,13 +35,11 @@ const thesis = {
     'An agent is three separable layers: a model that reasons, a harness that runs the loop and decides what the model sees, and open interfaces that carry requests to the world. Each fails differently.',
   dataSide:
     'The data half needs one definition per metric, one authoritative copy per dataset, and one place access is enforced. An open lakehouse provides that because agents multiply readers, and formats only one engine can read cannot serve many readers.',
-  substrate: [
-    { project: 'Apache Parquet', settles: 'Columnar files on object storage, with statistics that let narrow queries skip most of the data.' },
-    { project: 'Apache Iceberg', settles: 'Files behaving as tables: atomic commits, schema evolution, snapshot history.' },
-    { project: 'Apache Polaris', settles: 'The catalog: what tables exist, who may read them, and short-lived credentials scoped to those files.' },
-    { project: 'Apache Arrow', settles: 'The in-memory and on-the-wire shape of results, so per-call transport overhead stays small.' },
-    { project: 'Apache Ossie', settles: 'A vendor-neutral standard for semantic metadata, so metric definitions are portable. Incubating.' },
-  ],
+  substrate: apacheProjects.map((p) => ({
+    project: p.project,
+    settles: p.settles,
+    url: p.url.startsWith('/') ? `https://agenticanalyticsnow.com${p.url}` : p.url,
+  })),
 };
 
 const work = { writing, channels, playlists, sisterSites, community };

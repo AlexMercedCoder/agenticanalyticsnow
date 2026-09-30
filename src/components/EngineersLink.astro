@@ -1,0 +1,36 @@
+---
+/**
+ * "How engineers build this": closes every leader page with a link to the
+ * matching builder page on agenticlakehouse.com. The mapping lives in
+ * src/data/crosslinks.json, the same table agenticlakehouse.com uses for its
+ * "Why this matters to the business" blocks.
+ */
+import crosslinks from '../data/crosslinks.json';
+
+interface Props { slug: string }
+const { slug } = Astro.props;
+const path = (crosslinks.leaderToBuilder as Record<string, string>)[slug];
+const target = path ? (crosslinks.builder as Record<string, { title: string; how: string }>)[path] : undefined;
+const url = path ? `https://agenticlakehouse.com${path}` : '';
+---
+
+{target && (
+  <aside class="shell engineers" aria-label="How engineers build this">
+    <p class="engineers__label">How engineers build this</p>
+    <p>
+      {target.how}{' '}
+      <a href={url}>Read &ldquo;{target.title}&rdquo; on Agentic Lakehouse</a>.
+    </p>
+  </aside>
+)}
+
+<style>
+  .engineers {
+    margin-top: 1rem; margin-bottom: 2.5rem; padding: 1.3rem 1.5rem;
+    background: var(--paper-raised); border: 1px solid var(--rule);
+    border-left: 4px solid var(--data); border-radius: var(--radius);
+  }
+  .engineers__label { font: 600 0.72rem var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--data); margin: 0 0 0.45rem; }
+  .engineers p:last-child { margin: 0; color: var(--ink-soft); max-width: 48rem; }
+  .engineers a { color: var(--agent); font-weight: 650; text-underline-offset: 3px; }
+</style>

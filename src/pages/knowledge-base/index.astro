@@ -16,7 +16,7 @@ const groups = [
   {
     kind: 'substrate' as const,
     title: 'The data substrate',
-    note: 'The open lakehouse underneath: what each Apache project settles, and where each one stops.',
+    note: 'The open lakehouse underneath, the semantic contract on top of it, and why both matter when agents multiply readers.',
   },
   {
     kind: 'practice' as const,
@@ -30,9 +30,9 @@ const entries = (await getCollection('kb')).sort((a, b) => a.data.order - b.data
 const jsonLd = [
   {
     '@type': 'CollectionPage',
-    '@id': 'https://agenticanalyticsnow.com/knowledge-base#page',
+    '@id': 'https://agenticanalyticsnow.com/knowledge-base/#page',
     name: 'Agentic analytics knowledge base',
-    url: 'https://agenticanalyticsnow.com/knowledge-base',
+    url: 'https://agenticanalyticsnow.com/knowledge-base/',
     description:
       'Reference entries on agentic analytics: the agent stack, the governed semantic data underneath, and the practice of running it across an enterprise.',
     isPartOf: { '@id': 'https://agenticanalyticsnow.com/#website' },
@@ -43,7 +43,7 @@ const jsonLd = [
         '@type': 'ListItem',
         position: index + 1,
         name: entry.data.title,
-        url: `https://agenticanalyticsnow.com/knowledge-base/${entry.id}`,
+        url: `https://agenticanalyticsnow.com/knowledge-base/${entry.id}/`,
       })),
     },
   },
@@ -52,7 +52,7 @@ const jsonLd = [
 
 <Base
   title="Knowledge base"
-  description="Twenty reference entries on agentic analytics: the model, harness, and open interfaces that make an agent, the Apache projects that hold the governed data underneath, and what it takes to run the whole thing across an enterprise."
+  description={`${entries.length} reference entries on agentic analytics for analytics leaders: the model, harness, and open interfaces that make an agent, the governed data underneath, and what it takes to run the whole thing across an enterprise.`}
   jsonLd={jsonLd}
   keywords={['agentic analytics', 'AI agents', 'semantic layer', 'Apache Iceberg', 'Apache Polaris', 'data governance', 'knowledge base']}
 >
@@ -80,7 +80,7 @@ const jsonLd = [
           <ul class="kb__list">
             {items.map((entry) => (
               <li>
-                <a href={`/knowledge-base/${entry.id}`}>
+                <a href={`/knowledge-base/${entry.id}/`}>
                   <span class="kb__num">{String(entry.data.order).padStart(2, '0')}</span>
                   <span class="kb__body">
                     <strong>{entry.data.title}</strong>

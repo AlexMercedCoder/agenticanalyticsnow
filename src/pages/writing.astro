@@ -4,9 +4,9 @@ import { writing, channels, playlists, sisterSites, community } from '../data/wo
 
 const jsonLd = [{
   '@type': 'CollectionPage',
-  '@id': 'https://agenticanalyticsnow.com/writing#page',
+  '@id': 'https://agenticanalyticsnow.com/writing/#page',
   name: 'Writing and video on agentic analytics',
-  url: 'https://agenticanalyticsnow.com/writing',
+  url: 'https://agenticanalyticsnow.com/writing/',
   description:
     'Selected articles, YouTube playlists, community spaces, and sister sites covering agentic analytics and the open lakehouse underneath it.',
   isPartOf: { '@id': 'https://agenticanalyticsnow.com/#website' },
@@ -118,7 +118,7 @@ const jsonLd = [{
         <li><a href={item.url} rel="noopener">{item.label}</a></li>
       ))}
     </ul>
-    <p class="block__more"><a href="/books">The books on these subjects</a></p>
+    <p class="block__more"><a href="/books/">The books on these subjects</a></p>
   </section>
 </Base>
 

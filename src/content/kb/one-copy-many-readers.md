@@ -8,7 +8,7 @@ sources:
   - label: OpenLakehouse.AlexMerced.com
     url: https://openlakehouse.alexmerced.com
     note: The substrate that makes one copy practical.
-related: [why-the-lakehouse, enterprise-rollout, governance-for-agents, apache-iceberg]
+related: [why-the-lakehouse, enterprise-rollout, governance-for-agents, portability-and-lock-in]
 ---
 
 The clean version of this architecture has one authoritative copy of each dataset, in an open

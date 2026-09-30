@@ -3,6 +3,8 @@ import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import StackDiagram from '../components/StackDiagram.astro';
 import SubstrateDiagram from '../components/SubstrateDiagram.astro';
+import EngineersLink from '../components/EngineersLink.astro';
+import { apacheProjects } from '../data/apache-projects';
 
 const entries = (await getCollection('kb')).sort((a, b) => a.data.order - b.data.order);
 const stack = entries.filter((e) => e.data.kind === 'stack');
@@ -11,21 +13,21 @@ const substrate = entries.filter((e) => e.data.kind === 'substrate');
 const jsonLd = [
   {
     '@type': 'TechArticle',
-    '@id': 'https://agenticanalyticsnow.com/the-stack#article',
+    '@id': 'https://agenticanalyticsnow.com/the-stack/#article',
     headline: 'The agentic analytics stack',
     description:
       'The four layers of agentic analytics: a model that reasons, a harness that runs the loop, open interfaces that carry the request, and governed semantic data in an open lakehouse underneath.',
-    url: 'https://agenticanalyticsnow.com/the-stack',
+    url: 'https://agenticanalyticsnow.com/the-stack/',
     author: { '@id': 'https://alexmerced.com/#alexmerced' },
     isPartOf: { '@id': 'https://agenticanalyticsnow.com/#website' },
     inLanguage: 'en-US',
   },
   {
     '@type': 'BreadcrumbList',
-    '@id': 'https://agenticanalyticsnow.com/the-stack#breadcrumbs',
+    '@id': 'https://agenticanalyticsnow.com/the-stack/#breadcrumbs',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://agenticanalyticsnow.com/' },
-      { '@type': 'ListItem', position: 2, name: 'The stack', item: 'https://agenticanalyticsnow.com/the-stack' },
+      { '@type': 'ListItem', position: 2, name: 'The stack', item: 'https://agenticanalyticsnow.com/the-stack/' },
     ],
   },
 ];
@@ -76,7 +78,7 @@ const jsonLd = [
     <ol class="layers">
       {stack.map((entry) => (
         <li>
-          <a href={`/knowledge-base/${entry.id}`}>
+          <a href={`/knowledge-base/${entry.id}/`}>
             <span class="layers__num">{String(entry.data.order).padStart(2, '0')}</span>
             <span class="layers__body">
               <strong>{entry.data.title}</strong>
@@ -111,20 +113,34 @@ const jsonLd = [
   <section class="shell band">
     <div class="band__head">
       <h2>The substrate, entry by entry</h2>
-      <p>What each project settles, where it stops, and why the boundary between them is deliberate.</p>
+      <p>Why the open lakehouse holds up under agents, and the semantic contract on top of it.</p>
     </div>
     <ul class="cards">
       {substrate.map((entry) => (
         <li>
-          <a href={`/knowledge-base/${entry.id}`}>
+          <a href={`/knowledge-base/${entry.id}/`}>
             <strong>{entry.data.title}</strong>
             <span>{entry.data.summary}</span>
           </a>
         </li>
       ))}
     </ul>
-    <p class="band__more"><a href="/knowledge-base">The full knowledge base, all {entries.length} entries</a></p>
+    <p class="band__more"><a href="/knowledge-base/">The full knowledge base, all {entries.length} entries</a></p>
   </section>
+
+  <section class="shell band" id="apache-projects">
+    <div class="band__head">
+      <h2>The Apache projects underneath, and why leaders should care</h2>
+      <p>Each one settles a separate question. The definitions live with the network's lakehouse references; here is what each means for the people deciding on agents.</p>
+    </div>
+    <ul class="projects">
+      {apacheProjects.map((p) => (
+        <li><a href={p.url}>{p.project}</a>: {p.whyLeaders}</li>
+      ))}
+    </ul>
+  </section>
+
+  <EngineersLink slug="the-stack" />
 </Base>
 
 <style>
@@ -161,6 +177,9 @@ const jsonLd = [
   .under p { color: #a9b1cc; }
   .under :global(.sub__name) { fill: #fff; }
   .under :global(.sub__role), .under :global(.sub__arrow-role) { fill: #a9b1cc; }
+
+  .projects { margin: 0; padding-left: 1.2rem; display: grid; gap: 0.6rem; max-width: 50rem; color: var(--ink-soft); }
+  .projects a { font-weight: 650; color: var(--agent); }
 
   .cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1rem; }
   .cards a {

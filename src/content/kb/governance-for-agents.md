@@ -8,7 +8,7 @@ sources:
   - label: "Apache Polaris: The Catalog Standard for Lakehouses and AI"
     url: https://www.dremio.com/blog/apache-polaris-the-catalog-standard-for-lakehouses-and-ai
     note: Why the catalog is the right place to enforce this.
-related: [apache-polaris, the-harness, open-interfaces, enterprise-rollout]
+related: [one-copy-many-readers, the-harness, open-interfaces, enterprise-rollout]
 ---
 
 Governance for agents is the same problem as governance for people, made urgent by three
@@ -43,7 +43,7 @@ second agent, the notebook, and the JDBC connection do not go through it.
 In the catalog. Every reader has to consult the catalog to find out where a table's current metadata
 lives. If the catalog also decides whether that reader may see the table, and vends short-lived
 credentials scoped to only the files that table needs, then enforcement sits in the one place
-nobody can route around. This is what [Apache Polaris](/knowledge-base/apache-polaris) is for.
+nobody can route around. This is what [Apache Polaris](https://opendatalakehouse.com/kb/polaris-catalog/) is for.
 
 ## Scoped credentials
 

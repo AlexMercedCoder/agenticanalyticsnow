@@ -69,12 +69,12 @@ pass through it.
 
 The rest of this knowledge base makes one claim in several parts:
 
-- Agents are a stack, not a model. The [model](/knowledge-base/the-model), the
-  [harness](/knowledge-base/the-harness), and the [open interfaces](/knowledge-base/open-interfaces)
+- Agents are a stack, not a model. The [model](/knowledge-base/the-model/), the
+  [harness](/knowledge-base/the-harness/), and the [open interfaces](/knowledge-base/open-interfaces/)
   each fail differently, and knowing which one is failing is most of debugging.
 - Governed semantic data is the other half. Without it, the agent is confidently wrong at machine
   speed, which is worse than being slow.
-- An [open lakehouse](/knowledge-base/why-the-lakehouse) is the practical way to hold that data,
+- An [open lakehouse](/knowledge-base/why-the-lakehouse/) is the practical way to hold that data,
   because agents multiply readers, and formats that only one vendor's engine can read cannot serve
   many readers.
 

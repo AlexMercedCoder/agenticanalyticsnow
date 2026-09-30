@@ -8,7 +8,7 @@ sources:
   - label: Open Source and the Data Lakehouse
     url: https://www.dremio.com/blog/open-source-and-the-data-lakehouse
     note: Assessing openness one layer at a time.
-related: [open-interfaces, apache-ossie, apache-polaris, why-the-lakehouse]
+related: [open-interfaces, apache-ossie, one-copy-many-readers, why-the-lakehouse]
 ---
 
 Lock-in is not a moral failing of vendors. It is the natural result of a component becoming load
@@ -57,7 +57,7 @@ on and encode the most institutional knowledge. If they exist only inside one BI
 model, moving means reconstructing years of arguments between finance and operations.
 
 This is now the most likely lock-in point in a modern stack, precisely because the layers below it
-solved their portability problems and this one has not yet. [Apache Ossie](/knowledge-base/apache-ossie)
+solved their portability problems and this one has not yet. [Apache Ossie](/knowledge-base/apache-ossie/)
 is the effort to close it. Until it matures, the practical defence is to keep the semantic model in
 version control, in a format you can export and read without the vendor's product.
 

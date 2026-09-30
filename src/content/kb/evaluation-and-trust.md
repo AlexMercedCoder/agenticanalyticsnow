@@ -30,7 +30,7 @@ The most valuable property is not accuracy. It is legibility. Every answer shoul
 A person who can see all four can check the answer in thirty seconds. A person who receives only a
 number has to either trust it or redo the work, and in practice they trust it.
 
-This is also why the [semantic layer](/knowledge-base/semantic-layer-as-contract) is load bearing
+This is also why the [semantic layer](/knowledge-base/semantic-layer-as-contract/) is load bearing
 for trust and not only for correctness. "Revenue, as defined in the finance model" is checkable.
 "Revenue, as the model interpreted it" is not.
 

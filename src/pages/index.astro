@@ -5,11 +5,13 @@ import EquationHero from '../components/EquationHero.astro';
 import SubstrateDiagram from '../components/SubstrateDiagram.astro';
 import { writing, channels } from '../data/work';
 import HomeFilmShowcase from '../components/HomeFilmShowcase.astro';
+import { apacheProjects } from '../data/apache-projects';
 
 const entries = (await getCollection('kb')).sort((a, b) => a.data.order - b.data.order);
 const opening = entries.filter((e) => e.data.kind === 'agentic');
 const stack = entries.filter((e) => e.data.kind === 'stack');
 const practice = entries.filter((e) => e.data.kind === 'practice');
+const substrateCount = entries.filter((e) => e.data.kind === 'substrate').length;
 const featured = writing.slice(0, 3);
 
 const jsonLd = [
@@ -21,32 +23,34 @@ const jsonLd = [
       '@type': 'ListItem',
       position: index + 1,
       name: entry.data.title,
-      url: `https://agenticanalyticsnow.com/knowledge-base/${entry.id}`,
+      url: `https://agenticanalyticsnow.com/knowledge-base/${entry.id}/`,
     })),
   },
 ];
 ---
 
 <Base
-  title="Agentic Analytics Now"
-  description="AI agents plus unified governed semantic data equals agentic analytics. The agent stack of model, harness, and open interfaces, and why an open lakehouse built on Iceberg, Polaris, Arrow, Parquet, and Ossie is the substrate that makes it work enterprise wide."
+  title="Agentic Analytics: AI Agents on Governed Semantic Data | Alex Merced"
+  description="Agentic analytics for analytics leaders, heads of BI, and CDOs: the business case, the rollout, and how to tell if your data is ready. AI agents plus governed semantic data equals agentic analytics."
   jsonLd={jsonLd}
   keywords={['agentic analytics', 'AI agents', 'open lakehouse', 'semantic layer', 'Apache Iceberg', 'Apache Polaris', 'Apache Arrow', 'Apache Parquet', 'Apache Ossie', 'data governance', 'Model Context Protocol']}
 >
   <section class="hero">
     <div class="shell">
       <div class="hero__copy">
-        <p class="eyebrow">Agents plus governed data</p>
-        <h1>Analytics that answers the follow-up question.</h1>
+        <p class="eyebrow">For analytics leaders, heads of BI, and CDOs</p>
+        <h1>Agentic analytics for analytics leaders</h1>
+        <p class="hero__promise">The case, the rollout, and how to tell if you are ready.</p>
         <p class="hero__lede">
           An AI agent can do an analyst's work: read a question, find the data, run the query, check
           the result, and try again. What decides whether it is right is not the model. It is
           whether the data underneath has one definition, one copy, and one place access is
-          enforced.
+          enforced. AI agents plus governed semantic data equals agentic analytics.
         </p>
         <div class="hero__actions">
-          <a class="button" href="/the-stack">See the stack</a>
-          <a class="button button--ghost" href="/knowledge-base">Read the knowledge base</a>
+          <a class="button" href="/knowledge-base/what-is-agentic-analytics/">The case</a>
+          <a class="button button--ghost" href="/knowledge-base/enterprise-rollout/">The rollout</a>
+          <a class="button button--ghost" href="/the-stack/">What needs to be in place</a>
         </div>
       </div>
 
@@ -87,7 +91,7 @@ const jsonLd = [
     <ul class="cards cards--agent">
       {opening.map((entry) => (
         <li>
-          <a href={`/knowledge-base/${entry.id}`}>
+          <a href={`/knowledge-base/${entry.id}/`}>
             <strong>{entry.data.title}</strong>
             <span>{entry.data.summary}</span>
           </a>
@@ -109,14 +113,14 @@ const jsonLd = [
       <ul class="cards cards--dark">
         {stack.map((entry) => (
           <li>
-            <a href={`/knowledge-base/${entry.id}`}>
+            <a href={`/knowledge-base/${entry.id}/`}>
               <strong>{entry.data.title}</strong>
               <span>{entry.data.summary}</span>
             </a>
           </li>
         ))}
       </ul>
-      <p class="band__more band__more--dark"><a href="/the-stack">The stack, drawn out</a></p>
+      <p class="band__more band__more--dark"><a href="/the-stack/">The stack, drawn out</a></p>
     </div>
   </section>
 
@@ -134,8 +138,14 @@ const jsonLd = [
         <p>
           Five Apache projects settle five separate questions. Each one is a specification with more
           than one implementation, which is the property that makes the stack assemblable at all.
+          What each means for analytics leaders:
         </p>
-        <p class="band__more"><a href="/knowledge-base#substrate">All seven substrate entries</a></p>
+        <ul class="projects">
+          {apacheProjects.map((p) => (
+            <li><a href={p.url}>{p.project}</a>: {p.whyLeaders}</li>
+          ))}
+        </ul>
+        <p class="band__more"><a href="/knowledge-base/#substrate">All {substrateCount} substrate entries</a></p>
       </div>
       <SubstrateDiagram />
     </div>
@@ -149,7 +159,7 @@ const jsonLd = [
     <ul class="cards cards--practice">
       {practice.map((entry) => (
         <li>
-          <a href={`/knowledge-base/${entry.id}`}>
+          <a href={`/knowledge-base/${entry.id}/`}>
             <strong>{entry.data.title}</strong>
             <span>{entry.data.summary}</span>
           </a>
@@ -174,7 +184,7 @@ const jsonLd = [
         </li>
       ))}
     </ul>
-    <p class="band__more"><a href="/writing">Everything else, including video and community</a></p>
+    <p class="band__more"><a href="/writing/">Everything else, including video and community</a></p>
   </section>
 
   <section class="shell channels">
@@ -191,7 +201,8 @@ const jsonLd = [
 <style>
   .hero { padding: 3.25rem 0 3.5rem; background: var(--paper-raised); border-bottom: 1px solid var(--rule); }
   .hero__copy { max-width: 46rem; margin-bottom: 3rem; }
-  .hero h1 { margin-bottom: 1.3rem; max-width: 15ch; }
+  .hero h1 { margin-bottom: 0.9rem; max-width: 20ch; }
+  .hero__promise { font-family: var(--display); font-size: 1.35rem; font-weight: 650; letter-spacing: -0.01em; margin: 0 0 1.1rem; }
   .hero__lede { font-size: 1.12rem; color: var(--ink-soft); max-width: 40rem; }
   .hero__actions { display: flex; flex-wrap: wrap; gap: 0.9rem; margin-top: 1.9rem; }
 
@@ -234,6 +245,8 @@ const jsonLd = [
   .substrate__grid { display: grid; grid-template-columns: 1fr 1.05fr; gap: 3.5rem; align-items: center; }
   .substrate h2 { margin: 0 0 0.9rem; }
   .substrate p { color: var(--ink-soft); }
+  .projects { margin: 0 0 1rem; padding-left: 1.2rem; display: grid; gap: 0.5rem; color: var(--ink-soft); font-size: 0.95rem; }
+  .projects a { font-weight: 650; color: var(--agent); }
 
   .pieces { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule); }
   .pieces li { border-bottom: 1px solid var(--rule); }

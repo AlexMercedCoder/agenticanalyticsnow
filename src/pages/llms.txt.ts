@@ -2,7 +2,10 @@ import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 import { writing, channels, playlists, sisterSites, community } from '../data/work';
 import bookData from '../data/books.json';
-import { networkGroups, newsletter } from '../data/network';
+import { newsletter } from '../data/network';
+import network from '../../network/network.json';
+import { apacheProjects } from '../data/apache-projects';
+import crosslinks from '../data/crosslinks.json';
 
 const SITE = 'https://agenticanalyticsnow.com';
 
@@ -17,11 +20,11 @@ export const GET: APIRoute = async () => {
   const entries = (await getCollection('kb')).sort((a, b) => a.data.order - b.data.order);
 
   const line = (entry: (typeof entries)[number]) =>
-    `- [${entry.data.title}](${SITE}/knowledge-base/${entry.id}): ${entry.data.summary}`;
+    `- [${entry.data.title}](${SITE}/knowledge-base/${entry.id}/): ${entry.data.summary}`;
 
   const body = `# Agentic Analytics Now
 
-> AI agents plus unified governed semantic data equals agentic analytics. This site covers the agent stack of model, harness, and open interfaces, the open lakehouse that holds the governed data underneath, and what it takes to run the combination across an enterprise rather than one pilot team. Written by Alex Merced, Head of Developer Relations at Dremio and co-author of Apache Iceberg: The Definitive Guide.
+> Agentic analytics for analytics leaders: the case, the rollout, and how to tell if you are ready. AI agents plus unified governed semantic data equals agentic analytics. This site covers the agent stack of model, harness, and open interfaces, the open lakehouse that holds the governed data underneath, and what it takes to run the combination across an enterprise rather than one pilot team. Written by Alex Merced, Head of Developer Relations at Dremio and co-author of Apache Iceberg: The Definitive Guide.
 
 The argument in one paragraph: an AI agent can do an analyst's work, taking a question, finding the data, running the query, checking the result, and trying again. What decides whether it is right is not the model. It is whether the data underneath has one definition per metric, one authoritative copy per dataset, and one place where access is enforced. Agents multiply readers and multiply the temptation to make private copies, which is why an open lakehouse built on Apache Parquet, Apache Iceberg, Apache Polaris, Apache Arrow, and Apache Ossie is the substrate that holds up under that pressure.
 
@@ -32,13 +35,28 @@ ${SECTIONS.map((section) => {
   return `## ${section.title}\n\n${items.map(line).join('\n')}`;
 }).join('\n\n')}
 
+## The Apache projects underneath, for analytics leaders
+
+Full definitions live with the network's glossary owners; this site covers why each matters to the people deciding on agentic analytics.
+
+${apacheProjects.map((p) => `- [${p.project}](${p.url.startsWith('/') ? SITE + p.url : p.url}): ${p.whyLeaders}`).join('\n')}
+
+## How engineers build this
+
+The engineering side of each topic lives on AgenticLakehouse.com, written for data engineers and architects:
+
+${Object.entries(crosslinks.leaderToBuilder as Record<string, string>)
+  .filter(([slug]) => slug === 'the-stack' || entries.some((e) => e.id === slug))
+  .map(([slug, path]) => `- ${slug === 'the-stack' ? 'The stack' : entries.find((e) => e.id === slug)!.data.title} -> [${(crosslinks.builder as Record<string, { title: string }>)[path].title}](https://agenticlakehouse.com${path})`)
+  .join('\n')}
+
 ## Site pages
 
 - [Home](${SITE}/): the thesis, with the stack and the substrate summarised.
-- [The stack](${SITE}/the-stack): the four layers drawn out, top to bottom.
-- [Knowledge base](${SITE}/knowledge-base): all ${entries.length} entries in four sections.
-- [Writing and video](${SITE}/writing): articles, playlists, community, and sister sites.
-- [Books](${SITE}/books): ${bookData.count} titles on agents, semantics, and the lakehouse, from a catalog of ${bookData.totalInCatalog}.
+- [The stack](${SITE}/the-stack/): the four layers drawn out, top to bottom.
+- [Knowledge base](${SITE}/knowledge-base/): all ${entries.length} entries in four sections.
+- [Writing and video](${SITE}/writing/): articles, playlists, community, and sister sites.
+- [Books](${SITE}/books/): ${bookData.count} titles on agents, semantics, and the lakehouse, from a catalog of ${bookData.totalInCatalog}.
 
 ## Selected writing
 
@@ -76,12 +94,14 @@ ${newsletter.editions.map((edition) => `- ${edition.title}, every ${edition.day}
 
 ## The rest of the network
 
-${networkGroups
+${network.footer.groups
   .map(
     (group) =>
-      `### ${group.title}\n\n${group.links.map((link) => `- [${link.label}](${link.url})`).join('\n')}`,
+      `### ${group.title}\n\n${group.links.map((link) => `- [${link.title}](${link.url})`).join('\n')}`,
   )
   .join('\n\n')}
+
+All of Alex's sites: ${network.footer.allSitesUrl}
 
 ## Notes for agents
 

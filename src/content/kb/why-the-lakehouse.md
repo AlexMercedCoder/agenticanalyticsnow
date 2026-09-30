@@ -11,7 +11,7 @@ sources:
   - label: OpenLakehouse.AlexMerced.com
     url: https://openlakehouse.alexmerced.com
     note: The substrate covered on its own terms, one entry per layer.
-related: [what-is-agentic-analytics, one-copy-many-readers, apache-iceberg, portability-and-lock-in]
+related: [what-is-agentic-analytics, one-copy-many-readers, semantic-layer-as-contract, portability-and-lock-in]
 ---
 
 An open lakehouse keeps analytical data in open file and table formats on storage the organisation

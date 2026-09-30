@@ -85,7 +85,7 @@ export const sisterSites = [
   {
     label: 'AgenticLakehouse.com',
     url: 'https://agenticlakehouse.com',
-    note: 'Agents operating on lakehouse data, covered at greater length.',
+    note: 'The engineering side of the same topic: reference architecture, working patterns, an agentic glossary, and a community of builders.',
   },
   {
     label: 'OpenLakehouse.AlexMerced.com',

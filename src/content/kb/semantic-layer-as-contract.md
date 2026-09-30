@@ -66,5 +66,5 @@ arrived found they were mostly ready. Organisations that did not are discovering
 their agent pilot stalled is a data modelling problem with an AI-shaped symptom.
 
 The open standards work here matters for the same reason it matters elsewhere: definitions locked
-inside one BI tool serve one BI tool. [Apache Ossie](/knowledge-base/apache-ossie) exists to make
+inside one BI tool serve one BI tool. [Apache Ossie](/knowledge-base/apache-ossie/) exists to make
 them portable.
