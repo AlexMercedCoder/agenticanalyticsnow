@@ -1,0 +1,157 @@
+---
+import Base from '../layouts/Base.astro';
+import LeaderTools from '../components/LeaderTools.astro';
+import { useCases } from '../data/leader-tools';
+
+const SITE = 'https://agenticanalyticsnow.com';
+const url = `${SITE}/use-cases/`;
+
+const jsonLd = [
+  {
+    '@type': 'CollectionPage',
+    '@id': `${url}#page`,
+    url,
+    name: 'Agentic analytics use cases by business function',
+    description:
+      'Example questions, required data and semantic definitions, and governance risks and controls for analytics agents in finance, sales and revenue operations, supply chain, customer support, and marketing.',
+    isPartOf: { '@id': `${SITE}/#website` },
+    author: { '@id': 'https://alexmerced.com/#alexmerced' },
+    inLanguage: 'en-US',
+    mainEntity: { '@id': `${url}#functions` },
+  },
+  {
+    '@type': 'ItemList',
+    '@id': `${url}#functions`,
+    name: 'Agentic analytics use cases by function',
+    itemListElement: useCases.map((uc, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: uc.title,
+      url: `${url}#${uc.id}`,
+    })),
+  },
+  {
+    '@type': 'BreadcrumbList',
+    '@id': `${url}#breadcrumbs`,
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
+      { '@type': 'ListItem', position: 2, name: 'Use-case library', item: url },
+    ],
+  },
+];
+---
+
+<Base
+  title="Agentic Analytics Use Cases by Function"
+  description="What people in finance, sales and revenue operations, supply chain, customer support, and marketing ask analytics agents, the data and definitions each question needs, and the governance risks and controls. Vendor-neutral."
+  jsonLd={jsonLd}
+  keywords={['agentic analytics use cases', 'AI agents for finance', 'AI agents for sales operations', 'supply chain analytics agents', 'customer support analytics', 'marketing analytics agents', 'semantic layer']}
+>
+  <section class="tool-head">
+    <div class="shell">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><span>Use-case library</span></nav>
+      <p class="eyebrow">Use-case library</p>
+      <h1>What agents get asked, function by function</h1>
+      <p class="tool-head__lede">
+        For each function: questions people would put to an analytics agent, the data and the
+        written definitions needed to answer them correctly, what can go wrong, and the controls
+        that prevent it. Use it to choose a first domain and to see how much definition work sits
+        behind a question that sounds simple.
+      </p>
+      <p class="tool-head__note">
+        Vendor-neutral. The numbers inside the example questions (14 days, 10%, 90 days) are
+        placeholders for the thresholds your business already uses.
+      </p>
+      <ul class="tool-toc" aria-label="Functions">
+        {useCases.map((uc) => <li><a href={`#${uc.id}`}>{uc.title}</a></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <div class="shell cases">
+    <section class="pattern" aria-labelledby="pattern-heading">
+      <h2 id="pattern-heading">The same pattern in every function</h2>
+      <p>
+        The questions differ, but the hard part does not. Each one hides three or four definition
+        choices (which date, which currency, which version of the hierarchy, which attribution
+        model) that an analyst resolves from memory and an agent resolves by guessing unless they
+        are written into the semantic layer. And each function holds data that some of its own
+        people should not see. That is why the <a href="/readiness/">readiness assessment</a> asks
+        about definitions and access before it asks about models.
+      </p>
+    </section>
+
+    {useCases.map((uc) => (
+      <section class="case" id={uc.id} aria-labelledby={`${uc.id}-h`}>
+        <h2 id={`${uc.id}-h`}>{uc.title}</h2>
+        <p class="case__intro">{uc.intro}</p>
+
+        <h3>Questions a user would ask</h3>
+        <ul class="case__questions">
+          {uc.questions.map((q) => <li>{q}</li>)}
+        </ul>
+
+        <div class="case__grid">
+          <div>
+            <h3>Data needed</h3>
+            <ul>{uc.data.map((d) => <li>{d}</li>)}</ul>
+          </div>
+          <div>
+            <h3>Definitions to write down first</h3>
+            <ul>{uc.definitions.map((d) => <li>{d}</li>)}</ul>
+          </div>
+          <div>
+            <h3>Governance risks</h3>
+            <ul class="case__risks">{uc.risks.map((d) => <li>{d}</li>)}</ul>
+          </div>
+          <div>
+            <h3>Controls</h3>
+            <ul class="case__controls">{uc.controls.map((d) => <li>{d}</li>)}</ul>
+          </div>
+        </div>
+
+        <p class="case__start"><strong>Where to start:</strong> {uc.start}</p>
+      </section>
+    ))}
+
+    <section class="pattern" aria-labelledby="engineers-heading">
+      <h2 id="engineers-heading">How engineers build the controls</h2>
+      <p>
+        The controls above are the same few mechanisms applied to different data. The builder side
+        is on Agentic Lakehouse:
+        <a href="https://agenticlakehouse.com/kb/row-level-security/">row-level security</a>,
+        <a href="https://agenticlakehouse.com/kb/column-level-security/">column-level security</a>,
+        <a href="https://agenticlakehouse.com/kb/data-masking/">data masking</a>,
+        <a href="https://agenticlakehouse.com/kb/ai-agent-authorization/">AI agent authorization</a>, and
+        <a href="https://agenticlakehouse.com/kb/ai-semantic-layer/">the AI semantic layer</a>.
+      </p>
+    </section>
+  </div>
+
+  <LeaderTools heading="Next: check readiness, then plan the rollout" only={['readiness', 'rollout-playbook', 'evaluation-checklist']} />
+</Base>
+
+<style>
+  .cases { max-width: 60rem; padding: 2rem 0 1rem; }
+  .pattern { background: var(--paper-raised); border: 1px solid var(--rule); border-left: 4px solid var(--data); border-radius: var(--radius); padding: 1.3rem 1.5rem; margin-bottom: 2.5rem; }
+  .pattern h2 { font-size: 1.25rem; margin: 0 0 0.6rem; }
+  .pattern p { margin: 0; color: var(--ink-soft); }
+  .pattern a, .case a { color: var(--agent); font-weight: 650; text-underline-offset: 3px; }
+
+  .case { padding: 1rem 0 2.5rem; border-bottom: 1px solid var(--rule); margin-bottom: 2.5rem; scroll-margin-top: 5.5rem; }
+  .case h2 { margin: 0 0 0.7rem; }
+  .case__intro { color: var(--ink-soft); font-size: 1.05rem; max-width: 48rem; }
+  .case h3 { font-size: 1rem; margin: 1.5rem 0 0.6rem; }
+  .case ul { margin: 0; padding-left: 1.2rem; display: grid; gap: 0.4rem; font-size: 0.95rem; }
+  .case__questions { list-style: none; padding: 0 !important; }
+  .case__questions li { padding: 0.7rem 0.9rem; background: var(--paper-raised); border: 1px solid var(--rule); border-left: 3px solid var(--agent); border-radius: 8px; }
+  .case__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 2.5rem; }
+  .case__grid ul { color: var(--ink-soft); }
+  .case__risks li::marker { color: var(--warn); }
+  .case__controls li::marker { color: var(--data); }
+  .case__start { margin: 1.6rem 0 0; padding: 0.9rem 1rem; background: rgba(240, 160, 60, .1); border-radius: 8px; font-size: 0.97rem; }
+
+  @media (max-width: 760px) {
+    .case__grid { grid-template-columns: 1fr; }
+  }
+</style>

@@ -1,0 +1,30 @@
+---
+/**
+ * Cards linking the analytics-leader tools (P6.10 to P6.12). Pass `only` to
+ * pick specific tools in order, or `exclude` to list the rest.
+ */
+import { leaderTools } from '../data/leader-tools';
+
+interface Props { heading?: string; only?: string[]; exclude?: string }
+const { heading = 'Tools for analytics leaders', only, exclude } = Astro.props;
+
+const tools = only
+  ? only.map((id) => leaderTools.find((t) => t.id === id)).filter((t) => t !== undefined)
+  : leaderTools.filter((t) => t.id !== exclude);
+---
+
+{tools.length > 0 && (
+  <aside class="shell tool-related" aria-label={heading}>
+    <h2>{heading}</h2>
+    <ul>
+      {tools.map((tool) => (
+        <li>
+          <a href={tool.href}>
+            <strong>{tool.title}</strong>
+            <span>{tool.summary}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </aside>
+)}

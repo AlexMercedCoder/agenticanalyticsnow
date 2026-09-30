@@ -1,0 +1,186 @@
+---
+import Base from '../layouts/Base.astro';
+import LeaderTools from '../components/LeaderTools.astro';
+import EngineersLink from '../components/EngineersLink.astro';
+import { playbookPhases, playbookRoles } from '../data/leader-tools';
+
+const SITE = 'https://agenticanalyticsnow.com';
+const url = `${SITE}/rollout-playbook/`;
+
+const jsonLd = [
+  {
+    '@type': 'HowTo',
+    '@id': `${url}#howto`,
+    name: 'Roll out agentic analytics in 90 days',
+    description:
+      'A five-phase, thirteen-week plan for taking agentic analytics from a chosen business domain to a written expand-or-stop decision, with owners, exit criteria, and risks for each phase.',
+    url,
+    totalTime: 'P13W',
+    inLanguage: 'en-US',
+    author: { '@id': 'https://alexmerced.com/#alexmerced' },
+    isPartOf: { '@id': `${SITE}/#website` },
+    step: playbookPhases.map((phase, i) => ({
+      '@type': 'HowToStep',
+      position: i + 1,
+      name: `${phase.weeks}: ${phase.title}`,
+      url: `${url}#${phase.id}`,
+      text: phase.goal,
+      itemListElement: phase.activities.map((a) => ({ '@type': 'HowToDirection', text: a })),
+    })),
+  },
+  {
+    '@type': 'BreadcrumbList',
+    '@id': `${url}#breadcrumbs`,
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
+      { '@type': 'ListItem', position: 2, name: '90-day rollout playbook', item: url },
+    ],
+  },
+];
+---
+
+<Base
+  title="90-Day Agentic Analytics Rollout Playbook"
+  description="Five phases across thirteen weeks for rolling out agentic analytics in one business domain: owners, work, exit criteria, and risks for each phase, ending in a written decision to expand, extend, or stop."
+  jsonLd={jsonLd}
+  keywords={['agentic analytics rollout', 'AI agent pilot plan', '90-day plan', 'analytics AI adoption', 'semantic layer', 'AI governance']}
+>
+  <section class="tool-head">
+    <div class="shell">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><span>90-day rollout playbook</span></nav>
+      <p class="eyebrow">Rollout playbook</p>
+      <h1>Ninety days, one domain, one decision</h1>
+      <p class="tool-head__lede">
+        A plan for taking agentic analytics from an idea to a written decision in thirteen weeks.
+        It spends most of the time on definitions, access, and evaluation, because that is where
+        pilots succeed or stall, and it expands by business domain rather than by user count.
+      </p>
+      <p class="tool-head__note">
+        Adjust the week ranges to your organisation; keep the order and the exit criteria. A phase
+        is finished when its exit criteria are met, not when its weeks run out.
+      </p>
+      <div class="tool-head__actions no-print">
+        <a class="button" href="/rollout-playbook.md" download="agentic-analytics-90-day-playbook.md" data-network-event="download_playbook_md">Download Markdown</a>
+        <button type="button" class="button button--ghost" id="print-playbook">Print or save as PDF</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="shell playbook">
+    <ol class="timeline no-print" aria-label="Phases">
+      {playbookPhases.map((phase) => (
+        <li><a href={`#${phase.id}`}><span>{phase.weeks}</span><strong>{phase.title}</strong></a></li>
+      ))}
+    </ol>
+
+    <section class="roles" aria-labelledby="roles-h">
+      <h2 id="roles-h">Who is involved</h2>
+      <p>
+        Six roles. In a smaller organisation one person may hold two of them, but each needs a
+        name next to it before week 1 ends.
+      </p>
+      <dl>
+        {playbookRoles.map((r) => (
+          <div><dt>{r.role}</dt><dd>{r.does}</dd></div>
+        ))}
+      </dl>
+    </section>
+
+    {playbookPhases.map((phase, i) => (
+      <section class="phase" id={phase.id} aria-labelledby={`${phase.id}-h`}>
+        <p class="phase__weeks">Phase {i + 1} · {phase.weeks}</p>
+        <h2 id={`${phase.id}-h`}>{phase.title}</h2>
+        <p class="phase__goal">{phase.goal}</p>
+        <p class="phase__owners"><strong>Owners:</strong> {phase.owners.join(', ')}</p>
+
+        <div class="phase__grid">
+          <div>
+            <h3>The work</h3>
+            <ul>{phase.activities.map((a) => <li>{a}</li>)}</ul>
+          </div>
+          <div>
+            <h3>Exit criteria</h3>
+            <ul class="phase__exit">{phase.exit.map((e) => <li>{e}</li>)}</ul>
+            <h3>Risks</h3>
+            <ul class="phase__risks">{phase.risks.map((r) => <li>{r}</li>)}</ul>
+          </div>
+        </div>
+
+        <p class="phase__read">
+          Read: {phase.links.map((l, j) => (
+            <>{j > 0 && ', '}<a href={l.href}>{l.label}</a></>
+          ))}
+        </p>
+      </section>
+    ))}
+
+    <section class="after" aria-labelledby="after-h">
+      <h2 id="after-h">After day 90</h2>
+      <p>
+        The second domain goes faster than the first, but not because of the agent. The catalog,
+        the policies, the identity path, and the evaluation habit are already in place, so the work
+        is the new domain's definitions and grants. The longer view, including what good looks like
+        at eighteen months, is in <a href="/knowledge-base/enterprise-rollout/">Rolling this out
+        enterprise wide</a>.
+      </p>
+    </section>
+  </div>
+
+  <EngineersLink slug="enterprise-rollout" />
+  <LeaderTools heading="Related leader tools" exclude="rollout-playbook" />
+</Base>
+
+<script>
+  document.getElementById('print-playbook')?.addEventListener('click', () => window.print());
+</script>
+
+<style>
+  .playbook { max-width: 60rem; padding: 2rem 0 1rem; }
+
+  .timeline { list-style: none; margin: 0 0 2.5rem; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.5rem; }
+  .timeline a { display: grid; gap: 0.25rem; height: 100%; padding: 0.8rem 0.85rem; text-decoration: none; background: var(--paper-raised); border: 1px solid var(--rule); border-top: 3px solid var(--agent); border-radius: 8px; }
+  .timeline li:nth-child(2) a { border-top-color: var(--data); }
+  .timeline li:nth-child(3) a { border-top-color: var(--signal); }
+  .timeline li:nth-child(4) a { border-top-color: var(--result); }
+  .timeline li:nth-child(5) a { border-top-color: var(--warn); }
+  .timeline a:hover { border-color: var(--agent); }
+  .timeline span { font: 600 0.68rem var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); }
+  .timeline strong { font-family: var(--display); font-size: 0.95rem; line-height: 1.25; }
+
+  .roles { margin-bottom: 2.5rem; }
+  .roles h2 { font-size: 1.5rem; margin: 0 0 0.5rem; }
+  .roles > p { color: var(--ink-soft); }
+  .roles dl { margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+  .roles dl div { padding: 0.85rem 1rem; background: var(--paper-raised); border: 1px solid var(--rule); border-radius: 8px; }
+  .roles dt { font-weight: 650; margin-bottom: 0.2rem; }
+  .roles dd { margin: 0; color: var(--ink-soft); font-size: 0.93rem; }
+
+  .phase { padding: 1.5rem 0 2.25rem; border-top: 1px solid var(--rule); scroll-margin-top: 5.5rem; break-inside: avoid-page; }
+  .phase__weeks { font: 600 0.72rem var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--agent); margin: 0 0 0.5rem; }
+  .phase h2 { margin: 0 0 0.6rem; }
+  .phase__goal { font-size: 1.08rem; color: var(--ink-soft); max-width: 48rem; }
+  .phase__owners { font-size: 0.95rem; }
+  .phase h3 { font-size: 1rem; margin: 1.2rem 0 0.55rem; }
+  .phase__grid { display: grid; grid-template-columns: 1.15fr 1fr; gap: 0 2.5rem; }
+  .phase ul { margin: 0; padding-left: 1.2rem; display: grid; gap: 0.45rem; font-size: 0.95rem; color: var(--ink-soft); }
+  .phase__exit li::marker { color: var(--data); }
+  .phase__risks li::marker { color: var(--warn); }
+  .phase__read { margin: 1.4rem 0 0; font-size: 0.93rem; }
+  .phase__read a, .after a { color: var(--agent); font-weight: 650; text-underline-offset: 3px; }
+
+  .after { background: var(--paper-raised); border: 1px solid var(--rule); border-left: 4px solid var(--result); border-radius: var(--radius); padding: 1.3rem 1.5rem; margin: 1rem 0 2rem; }
+  .after h2 { font-size: 1.25rem; margin: 0 0 0.6rem; }
+  .after p { margin: 0; color: var(--ink-soft); }
+
+  @media (max-width: 860px) {
+    .timeline { grid-template-columns: 1fr 1fr; }
+    .roles dl, .phase__grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 480px) {
+    .timeline { grid-template-columns: 1fr; }
+  }
+  @media print {
+    .playbook { max-width: none; padding: 0; }
+    .roles dl div { background: #fff; border-color: #999; }
+  }
+</style>

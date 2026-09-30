@@ -1,0 +1,148 @@
+---
+import Base from '../layouts/Base.astro';
+import LeaderTools from '../components/LeaderTools.astro';
+import { checklistAreas } from '../data/leader-tools';
+
+const SITE = 'https://agenticanalyticsnow.com';
+const url = `${SITE}/evaluation-checklist/`;
+const count = checklistAreas.reduce((n, a) => n + a.items.length, 0);
+
+const jsonLd = [
+  {
+    '@type': 'WebPage',
+    '@id': `${url}#page`,
+    url,
+    name: 'Agentic analytics evaluation checklist',
+    description: `${count} vendor-neutral evaluation and RFP questions for agentic analytics products, in six areas, with what a good answer includes.`,
+    isPartOf: { '@id': `${SITE}/#website` },
+    author: { '@id': 'https://alexmerced.com/#alexmerced' },
+    inLanguage: 'en-US',
+    mainEntity: { '@id': `${url}#areas` },
+  },
+  {
+    '@type': 'ItemList',
+    '@id': `${url}#areas`,
+    name: 'Evaluation areas',
+    itemListElement: checklistAreas.map((area, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: area.title,
+      url: `${url}#${area.id}`,
+    })),
+  },
+  {
+    '@type': 'BreadcrumbList',
+    '@id': `${url}#breadcrumbs`,
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
+      { '@type': 'ListItem', position: 2, name: 'Evaluation checklist', item: url },
+    ],
+  },
+];
+
+let n = 0;
+---
+
+<Base
+  title="Agentic Analytics Evaluation Checklist (RFP Questions)"
+  description={`${count} vendor-neutral questions for evaluating agentic analytics products: semantic layer, governance, openness and lock-in, accuracy, cost and latency, and operations, each with what a good answer includes. Print it or download the Markdown.`}
+  jsonLd={jsonLd}
+  keywords={['agentic analytics RFP', 'AI analytics vendor evaluation', 'evaluation checklist', 'semantic layer', 'vendor lock-in', 'AI governance']}
+>
+  <section class="tool-head">
+    <div class="shell">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><span>Evaluation checklist</span></nav>
+      <p class="eyebrow">Evaluation checklist</p>
+      <h1>Questions to ask before you buy</h1>
+      <p class="tool-head__lede">
+        {count} questions for any agentic analytics product or platform, grouped into six areas.
+        Each comes with what a good answer includes, so the people scoring vendor responses agree on
+        what they are looking for. It names no vendors and favours none.
+      </p>
+      <p class="tool-head__note">
+        Use it as RFP questions or as the agenda for a proof of concept. Score each answer 0 to 3
+        against the good answer, before the demos rather than after.
+      </p>
+      <div class="tool-head__actions no-print">
+        <a class="button" href="/evaluation-checklist.md" download="agentic-analytics-evaluation-checklist.md" data-network-event="download_checklist_md">Download Markdown</a>
+        <button type="button" class="button button--ghost" id="print-checklist">Print or save as PDF</button>
+      </div>
+      <ul class="tool-toc no-print" aria-label="Areas">
+        {checklistAreas.map((area) => <li><a href={`#${area.id}`}>{area.title}</a></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <div class="shell checklist">
+    {checklistAreas.map((area) => (
+      <section class="area" id={area.id} aria-labelledby={`${area.id}-h`}>
+        <h2 id={`${area.id}-h`}>{area.title}</h2>
+        <p class="area__intro">{area.intro}</p>
+        <ol class="items">
+          {area.items.map((item) => {
+            n += 1;
+            return (
+              <li value={n}>
+                <p class="items__q">{item.q}</p>
+                <p class="items__good"><span>A good answer:</span> {item.good}</p>
+                <p class="items__score print-only">Answer: ____________________________ Score (0 to 3): ___</p>
+              </li>
+            );
+          })}
+        </ol>
+      </section>
+    ))}
+
+    <section class="before" aria-labelledby="before-h">
+      <h2 id="before-h">Before you send it</h2>
+      <ul>
+        <li>
+          Collect your own question set with known answers first, and insist on running it on your
+          data during the trial. The <a href="/rollout-playbook/">rollout playbook</a> covers how to
+          build one in the first two weeks.
+        </li>
+        <li>Ask every vendor the same questions in the same order, and agree the scoring before anyone sees a demo.</li>
+        <li>
+          Weight the areas to your situation. The <a href="/knowledge-base/portability-and-lock-in/">lock-in
+          exercise</a> shows why governance and openness tend to decide more of the long-term cost
+          than the model choice.
+        </li>
+        <li>
+          If the <a href="/readiness/">readiness assessment</a> puts you at Exploring, most of these
+          answers will matter less than the definitions and access work on your own side.
+        </li>
+      </ul>
+    </section>
+  </div>
+
+  <LeaderTools heading="Related leader tools" exclude="evaluation-checklist" />
+</Base>
+
+<script>
+  document.getElementById('print-checklist')?.addEventListener('click', () => window.print());
+</script>
+
+<style>
+  .checklist { max-width: 52rem; padding: 2rem 0 1rem; }
+  .area { margin-bottom: 2.75rem; scroll-margin-top: 5.5rem; }
+  .area h2 { margin: 0 0 0.5rem; font-size: 1.6rem; }
+  .area__intro { color: var(--ink-soft); margin: 0 0 1.2rem; }
+  .items { margin: 0; padding-left: 2rem; display: grid; gap: 0.9rem; }
+  .items li { padding: 0.9rem 1rem; background: var(--paper-raised); border: 1px solid var(--rule); border-radius: 8px; break-inside: avoid; }
+  .items li::marker { font: 650 0.95rem var(--mono); color: var(--agent); }
+  .items__q { font-weight: 650; margin: 0 0 0.45rem; }
+  .items__good { margin: 0; color: var(--ink-soft); font-size: 0.95rem; }
+  .items__good span { font-weight: 650; color: var(--data); }
+  .print-only { display: none; }
+  .before { background: var(--paper-raised); border: 1px solid var(--rule); border-left: 4px solid var(--result); border-radius: var(--radius); padding: 1.3rem 1.5rem; margin-bottom: 2rem; }
+  .before h2 { font-size: 1.25rem; margin: 0 0 0.7rem; }
+  .before ul { margin: 0; padding-left: 1.2rem; display: grid; gap: 0.55rem; color: var(--ink-soft); }
+  .before a { color: var(--agent); font-weight: 650; }
+
+  @media print {
+    .checklist { max-width: none; padding: 0; }
+    .items li { border-color: #999; background: #fff; }
+    .print-only { display: block; margin: 0.6rem 0 0; font-size: 0.9rem; }
+    .before { border-color: #999; }
+  }
+</style>

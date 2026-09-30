@@ -109,7 +109,7 @@ p { margin: 0 0 1.1em; }
 .brand__text strong { font-family: var(--display); font-size: 1.02rem; letter-spacing: -0.02em; }
 .brand__text span { font-size: 0.74rem; color: var(--ink-soft); }
 
-.desktop-nav { display: flex; gap: 1.5rem; }
+.desktop-nav { display: flex; gap: 1.15rem; }
 .desktop-nav a {
   text-decoration: none; font-size: 0.93rem; font-weight: 600; padding: 0.35rem 0;
   border-bottom: 2px solid transparent;
@@ -138,7 +138,7 @@ p { margin: 0 0 1.1em; }
   padding: 0.95rem 0.5rem; border-bottom: 1px solid var(--rule);
 }
 
-@media (max-width: 860px) {
+@media (max-width: 1140px) {
   .desktop-nav { display: none; }
   .menu-toggle { display: inline-flex; }
 }
@@ -195,4 +195,31 @@ p { margin: 0 0 1.1em; }
     animation-iteration-count: 1 !important;
     transition-duration: .001ms !important;
   }
+}
+
+/* ---------------------------------------------------------------- leader tools (P6.10 to P6.12) */
+.tool-head { padding: 2.5rem 0 2.25rem; background: var(--paper-raised); border-bottom: 1px solid var(--rule); }
+.tool-head h1 { margin: 0 0 1rem; max-width: 22ch; }
+.tool-head__lede { font-size: 1.12rem; color: var(--ink-soft); max-width: 46rem; margin: 0 0 1rem; }
+.tool-head__note { font-size: 0.92rem; color: var(--ink-faint); max-width: 46rem; margin: 0; }
+.tool-head__actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.4rem; }
+.crumbs { display: flex; gap: 0.5rem; font-size: 0.85rem; color: var(--ink-faint); margin-bottom: 1.25rem; }
+.crumbs a { text-decoration: none; }
+.crumbs a:hover { text-decoration: underline; }
+.tool-toc { display: flex; flex-wrap: wrap; gap: 0.5rem; list-style: none; margin: 1.4rem 0 0; padding: 0; }
+.tool-toc a { display: inline-block; padding: 0.4rem 0.8rem; border: 1px solid var(--rule); border-radius: 999px; text-decoration: none; font-size: 0.88rem; font-weight: 600; background: var(--paper); }
+.tool-toc a:hover { border-color: var(--agent); }
+.tool-related { padding: 2rem 0 3rem; }
+.tool-related h2 { font-size: 1.3rem; margin: 0 0 1rem; }
+.tool-related ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 1rem; }
+.tool-related a { display: grid; gap: 0.3rem; height: 100%; padding: 1.1rem 1.15rem; text-decoration: none; background: var(--paper-raised); border: 1px solid var(--rule); border-top: 3px solid var(--result); border-radius: var(--radius); }
+.tool-related a:hover { border-color: var(--agent); }
+.tool-related strong { font-family: var(--display); font-size: 1.02rem; }
+.tool-related span { font-size: 0.86rem; color: var(--ink-soft); }
+
+@media print {
+  .site-header, .site-footer, .newsletter, .network-cta, .skip-link, .no-print, .engineers, .tool-related { display: none !important; }
+  body { background: #fff; font-size: 11pt; color: #000; }
+  .tool-head { background: #fff; border: 0; padding: 0 0 1rem; }
+  a { color: #000; }
 }
