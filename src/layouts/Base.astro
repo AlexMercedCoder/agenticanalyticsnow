@@ -21,7 +21,9 @@ const { title, description, jsonLd = [], keywords = [], ogType = 'website' } = A
 const SITE = 'https://agenticanalyticsnow.com';
 const pathname = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : `${Astro.url.pathname}/`;
 const canonical = new URL(pathname, SITE).href;
-const fullTitle = Astro.url.pathname === '/' ? title : `${title} | Agentic Analytics Now`;
+// Keep titles under about 60 characters: drop the site suffix when the page title is long.
+const SUFFIX = ' | Agentic Analytics Now';
+const fullTitle = Astro.url.pathname === '/' || (title + SUFFIX).length > 60 ? title : `${title}${SUFFIX}`;
 
 const baseGraph = [
   {

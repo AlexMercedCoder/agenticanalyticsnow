@@ -5,6 +5,7 @@ import { TRADEMARK_NOTICE } from '../../data/network';
 import EngineersLink from '../../components/EngineersLink.astro';
 import LeaderTools from '../../components/LeaderTools.astro';
 import { kbToTools } from '../../data/leader-tools';
+import { fileDates } from '../../../scripts/content-dates.mjs';
 
 export async function getStaticPaths() {
   const entries = await getCollection('kb');
@@ -25,6 +26,7 @@ const next = position < all.length - 1 ? all[position + 1] : null;
 
 const toc = headings.filter((heading) => heading.depth === 2);
 const url = `https://agenticanalyticsnow.com/knowledge-base/${entry.id}/`;
+const dates = fileDates([`src/content/kb/${entry.id}.md`]);
 
 const kindLabel: Record<string, string> = {
   agentic: 'What this is',
@@ -42,6 +44,7 @@ const jsonLd = [
     description: entry.data.summary,
     url,
     inLanguage: 'en-US',
+    ...(dates.published ? { datePublished: dates.published, dateModified: dates.modified } : {}),
     author: { '@id': 'https://alexmerced.com/#alexmerced' },
     publisher: { '@id': 'https://alexmerced.com/#alexmerced' },
     isPartOf: { '@id': 'https://agenticanalyticsnow.com/#website' },

@@ -5,6 +5,9 @@ import StackDiagram from '../components/StackDiagram.astro';
 import SubstrateDiagram from '../components/SubstrateDiagram.astro';
 import EngineersLink from '../components/EngineersLink.astro';
 import { apacheProjects } from '../data/apache-projects';
+import { fileDates } from '../../scripts/content-dates.mjs';
+
+const dates = fileDates(['src/pages/the-stack.astro']);
 
 const entries = (await getCollection('kb')).sort((a, b) => a.data.order - b.data.order);
 const stack = entries.filter((e) => e.data.kind === 'stack');
@@ -21,6 +24,7 @@ const jsonLd = [
     author: { '@id': 'https://alexmerced.com/#alexmerced' },
     isPartOf: { '@id': 'https://agenticanalyticsnow.com/#website' },
     inLanguage: 'en-US',
+    ...(dates.published ? { datePublished: dates.published, dateModified: dates.modified } : {}),
   },
   {
     '@type': 'BreadcrumbList',
@@ -35,7 +39,7 @@ const jsonLd = [
 
 <Base
   title="The agentic analytics stack"
-  description="Four layers: a model that reasons, a harness that runs the loop, open interfaces that carry the request, and governed semantic data in an open lakehouse underneath. Each fails differently, and knowing which one is failing is most of debugging an agent."
+  description="The four layers of agentic analytics: a model that reasons, a harness that runs the loop, open interfaces, and governed semantic data in an open lakehouse."
   jsonLd={jsonLd}
   keywords={['agentic stack', 'agent architecture', 'model harness interfaces', 'MCP', 'Iceberg REST catalog', 'Arrow Flight']}
 >
